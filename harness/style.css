@@ -189,3 +189,5 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 @media(max-width:900px){.proc{min-height:340px}}
 
 .launcher-row button{border:0;background:transparent;padding:0;text-align:left;font:inherit;cursor:pointer}
+
+.uhead .usage-heading-label{flex:1}

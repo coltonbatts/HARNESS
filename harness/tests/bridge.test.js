@@ -74,3 +74,9 @@ test('post-dispatch observation discards a probe that started before dispatch',a
  finishOld({tools:destinations.map(d=>unknownState(d.id,'old probe',at))});await old;
  const result=await opening;assert.equal(reads,2);assert.equal(result.observation.running,true);
 });
+
+test('static traversal/missing/malformed paths return 404 under unchanged strict CSP',async(t)=>{
+ const bridge=createBridge({service:{state:async()=>observed()}});const origin=await bridge.listen(0);t.after(()=>new Promise(r=>bridge.server.close(r)));
+ for(const pathname of ['/%2e%2e%2fREADME.md','/%2e%2e%2fmissing.html','/%2fmissing.html','/%00','/%ZZ','/missing.js'])assert.equal((await fetch(origin+pathname)).status,404,pathname);
+ const csp=(await fetch(origin)).headers.get('content-security-policy');assert.ok(csp.includes("style-src 'self'"));assert.equal(csp.includes('unsafe-inline'),false);assert.equal(csp.includes('style-src-attr'),false);
+});

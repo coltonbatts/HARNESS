@@ -1,0 +1,44 @@
+{
+  "audit": {
+    "afterRender": {
+      "events": 0,
+      "styleCount": 0
+    },
+    "events": [
+      {
+        "blockedURI": "inline",
+        "directive": "style-src-elem",
+        "disposition": "enforce",
+        "readyState": "interactive"
+      }
+    ],
+    "header": {
+      "flexGrow": "1",
+      "rightGap": 0
+    },
+    "inlineHandlers": 0,
+    "mounts": [
+      {
+        "module": "chat",
+        "styleCount": 0
+      },
+      {
+        "module": "usage",
+        "styleCount": 0
+      },
+      {
+        "module": "launcher",
+        "styleCount": 0
+      }
+    ],
+    "styleCount": 1
+  },
+  "headerLabelClass": "usage-heading-label",
+  "styleCount": 1,
+  "styled": [
+    {
+      "id": "codex-browser-sidebar-comments-root",
+      "tag": "DIV"
+    }
+  ]
+}

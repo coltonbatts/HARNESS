@@ -36,9 +36,11 @@ export function createBridge({service=new BridgeService(),root=harnessRoot}={}){
       // Reject cross-origin document/subresource requests; direct address navigation is allowed.
       if(req.headers.origin&&req.headers.origin!==origin)return reply(403,{error:'Origin refused'});
       if(req.headers['sec-fetch-site']&&!['none','same-origin'].includes(req.headers['sec-fetch-site']))return reply(403,{error:'Cross-origin static request refused'});
-      const rel=decodeURIComponent(url.pathname).replace(/^\//,'')||'index.html';
-      if(rel.split('/').some(p=>p.startsWith('.'))||rel.includes('\\'))return reply(404,{error:'File unavailable'});
-      const resolved=await realpath(path.resolve(root,rel)),base=await realpath(root);
+      let rel;try{rel=decodeURIComponent(url.pathname).replace(/^\//,'')||'index.html';}catch{return reply(404,{error:'File unavailable'});}
+      if(rel.split('/').some(p=>p.startsWith('.'))||rel.includes('\\')||rel.includes('\0'))return reply(404,{error:'File unavailable'});
+      const base=await realpath(root),candidate=path.resolve(root,rel);
+      if(!candidate.startsWith(base+path.sep))return reply(404,{error:'File unavailable'});
+      let resolved;try{resolved=await realpath(candidate);}catch(error){if(['ENOENT','ENOTDIR','EINVAL'].includes(error.code))return reply(404,{error:'File unavailable'});throw error;}
       if(!resolved.startsWith(base+path.sep)||(await stat(resolved)).isDirectory())return reply(404,{error:'File unavailable'});
       const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json'};
       const type=types[path.extname(resolved)];if(!type)return reply(404,{error:'File unavailable'});

@@ -1,0 +1,38 @@
+{
+  "audit": {
+    "events": [
+      {
+        "blockedURI": "inline",
+        "directive": "style-src-attr",
+        "disposition": "enforce"
+      },
+      {
+        "blockedURI": "inline",
+        "directive": "style-src-elem",
+        "disposition": "enforce"
+      }
+    ],
+    "inlineHandlers": 0,
+    "mounts": [
+      {
+        "module": "chat",
+        "styleCount": 0
+      },
+      {
+        "module": "usage",
+        "styleCount": 1
+      },
+      {
+        "module": "launcher",
+        "styleCount": 1
+      }
+    ],
+    "styleCount": 2
+  },
+  "cssText": "",
+  "flexGrow": "0",
+  "headerRight": 1179,
+  "remainingRight": 996.25,
+  "styleAttribute": "flex:1",
+  "styles": 2
+}
