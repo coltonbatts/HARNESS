@@ -4,6 +4,7 @@ import {readFile,realpath,stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {BridgeService} from './core.mjs';
+import {JournalStore,validDay} from './journal.mjs';
 const harnessRoot=fileURLToPath(new URL('../harness/',import.meta.url));
 export function authorize(headers,{origin,token},mutation=false){
   if(headers.host!==new URL(origin).host)return false;
@@ -12,7 +13,7 @@ export function authorize(headers,{origin,token},mutation=false){
   const supplied=headers['x-bridge-token'];
   return typeof supplied==='string'&&Buffer.byteLength(supplied)===Buffer.byteLength(token)&&timingSafeEqual(Buffer.from(supplied),Buffer.from(token));
 }
-export function createBridge({service=new BridgeService(),root=harnessRoot}={}){
+export function createBridge({service=new BridgeService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
   const token=randomBytes(32).toString('hex');let origin;
   const server=http.createServer(async(req,res)=>{
     const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"};
@@ -23,6 +24,18 @@ export function createBridge({service=new BridgeService(),root=harnessRoot}={}){
       if(url.pathname.startsWith('/api/')){
         if(!authorize(req.headers,{origin,token},req.method==='POST'))return reply(403,{error:'Bridge authorization refused'});
         if(req.method==='GET'&&url.pathname==='/api/state')return reply(200,await service.state());
+        if(req.method==='GET'&&url.pathname==='/api/journal'){
+          if(!url.search)return reply(200,{days:await journal.list()});
+          const day=url.searchParams.get('day');
+          if([...url.searchParams.keys()].join(',')!=='day'||!validDay(day))return reply(400,{error:'Invalid journal date'});
+          return reply(200,{entry:await journal.read(day)});
+        }
+        if(req.method==='POST'&&['/api/journal','/api/journal/export'].includes(url.pathname)){
+          if(req.headers['content-type']!=='application/json')return reply(415,{error:'JSON required'});
+          let body='';for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>200000)return reply(413,{error:'Body too large'});}
+          let input;try{input=JSON.parse(body);}catch{return reply(400,{error:'Invalid JSON'});}
+          const result=await (url.pathname==='/api/journal/export'?journal.export(input):journal.save(input));return reply(result.status,result);
+        }
         if(req.method==='POST'&&url.pathname==='/api/open'){
           if(req.headers['content-type']!=='application/json')return reply(415,{error:'JSON required'});
           let body='';for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>1024)return reply(413,{error:'Body too large'});}

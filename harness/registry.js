@@ -23,6 +23,6 @@ export function readConfig(storage) {
   try {
     const value = JSON.parse(storage.getItem('home-harness-v1'));
     if (value?.version !== 1) return { version: 1, layout: 'tiled', backend: 'ollama' };
-    return { version: 1, layout: value.layout === 'chat' ? 'chat' : 'tiled', backend: value.backend === 'openrouter' ? 'openrouter' : 'ollama' };
+    return { version: 1, layout: ['chat','journal'].includes(value.layout) ? value.layout : 'tiled', backend: value.backend === 'openrouter' ? 'openrouter' : 'ollama' };
   } catch { return { version: 1, layout: 'tiled', backend: 'ollama' }; }
 }

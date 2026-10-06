@@ -1,2 +1,3 @@
 harness/data/*.json
 harness/data/*.tmp
+.journal/

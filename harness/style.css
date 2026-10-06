@@ -191,3 +191,37 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 .launcher-row button{border:0;background:transparent;padding:0;text-align:left;font:inherit;cursor:pointer}
 
 .uhead .usage-heading-label{flex:1}
+
+/* Journal fits below Chat; focus workspace 2 leaves room to reflect. */
+.chat{grid-column:1;grid-row:1}
+.journal{grid-column:1;grid-row:2}
+.usage{grid-column:2;grid-row:1}
+.proc{grid-column:2;grid-row:2}
+.layout-chat .chat{grid-row:1 / -1}
+.layout-chat .journal{display:none}
+.layout-journal .panel:not(.journal){display:none}
+.layout-journal .journal{grid-column:1 / -1;grid-row:1 / -1}
+.layout-journal:has(#proposal:not(:empty)) .chat{display:flex;position:absolute;inset:7px 9px 9px;z-index:5;background:#101620}
+.journal-body{overflow:auto;gap:7px}
+.journal-nav,.journal-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:10px}
+.journal-nav input{width:128px}
+.journal-nav select{max-width:135px}
+.journal-question{color:var(--fg);font-size:12px}
+.journal textarea{width:100%;min-height:75px;resize:vertical;background:rgba(8,11,17,.6);color:var(--fg);border:1px solid var(--bd2);padding:8px;font:inherit;line-height:1.5}
+.journal textarea::placeholder{color:var(--dim)}
+.journal textarea:focus-visible{outline:1px solid var(--cyan)}
+.journal details{font-size:10px}
+.journal summary{cursor:pointer;padding:3px 0}
+.journal details label{display:block;margin:5px 0}
+.journal-actions{margin-top:auto}
+#journal-save{color:var(--green)}
+#journal-status{overflow-wrap:anywhere}
+.layout-journal #journal-reflection{min-height:220px;flex:1}
+@media(max-width:900px){
+  .grid{grid-template-rows:auto auto auto auto}
+  .chat,.journal,.usage,.proc{grid-column:1;grid-row:auto;min-height:300px}
+  .chat{min-height:350px}.journal{order:1}.usage{order:2}.proc{order:3}
+  .layout-journal .journal,.layout-chat .chat{grid-row:auto}
+  .grid.layout-journal,.grid.layout-chat{grid-template-rows:minmax(0,1fr)}
+  .layout-journal #journal-reflection{min-height:190px}
+}
