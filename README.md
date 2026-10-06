@@ -2,7 +2,7 @@
 
 Journal is now available: click workspace **2**, press **Alt+2**, or type **`/journal`**. Write a few words and click `[ save entry ]` (Cmd/Ctrl+Enter in the reflection box). Choose a date or saved history to edit earlier entries. Browser drafts recover unsaved text; a successful save writes a private dated JSON file under `.journal/`, outside Git and static serving. `[ export .md ]` writes current text to `.journal/exports/YYYY-MM-DD-journal.md`; repeated exports replace that day's export. If the bridge is unavailable, export offers copyable Markdown. Layout reset does not touch entries. Reload the page after a bridge restart to get its new token.
 
-Activity notes are currently written by you. Hermes activity ingestion, AI recaps, assistant memory retrieval and scheduled reminders are pending. See [Journal design and implemented scope](docs/DAILY-JOURNAL.md).
+Activity notes are written by you. Journal can now read selected project/task records and generate a separate recap of model-selected exact source quotes through local Ollama: `[ refresh models ]`, select a local model, then `[ generate recap ]`. Processing stays on this machine; coverage is explicitly incomplete. Save archives the generated field; copying into your notes requires an explicit action. Hermes activity, assistant retrieval and scheduled reminders remain pending. See [Journal design and implemented scope](docs/DAILY-JOURNAL.md).
 
 A stable shell with swappable modules. The approved [visual target](docs/design/home-harness-mockup.html) is binding for this and all later stages. The old fixed five-pane prototype is superseded and preserved in `prototype/`.
 
@@ -34,9 +34,9 @@ node --test harness/tests/*.test.js
 
 See [Build log](docs/BUILD-LOG.md) for evidence and limits, [Module contract](docs/MODULE-CONTRACT.md) for the implemented boundary, and [Build prompts](docs/BUILD-PROMPTS.md) for the shell-first sequence. [Product specification](docs/PRODUCT-SPEC.md) preserves historical context and truth rules; fixed-pane requirements are superseded.
 
-The local bridge reads ps, dispatches four fixed app/URL destinations via execFile without a shell, stores dated journal files through a narrow API, and exposes one authenticated `/api/ollama` route for fixed local model-list reads and chat only. Per-run page token, strict own Origin/Fetch Metadata and Host checks protect activation. No external embedding, remote provider connection, session fabrication or arbitrary execution. Ollama has only fixed loopback `/api/tags` and `/api/chat` destinations; no URL/options/tools proxy or model download. Without the bridge, browser links request navigation only. Unknown is never zero; subscription percentages and API dollars stay separate. The local journal milestone is implemented; intelligence connectors and native packaging remain pending.
+The local bridge reads ps, dispatches four fixed app/URL destinations via execFile without a shell, reads fixed selected project/task records, stores dated journal files through a narrow API, and exposes one authenticated `/api/ollama` route for fixed local model-list reads and chat only. Per-run page token, strict own Origin/Fetch Metadata and Host checks protect activation. No external embedding, remote provider connection, session fabrication or arbitrary execution. Ollama has only fixed loopback `/api/tags` and `/api/chat` destinations; no URL/options/tools proxy or model download. Without the bridge, browser links request navigation only. Unknown is never zero; subscription percentages and API dollars stay separate. Local journal capture plus its selected-record connector and local Ollama recap are implemented; Hermes sessions, retrieval and native packaging remain pending.
 
-Current Studio Ops task: `/Users/coltonbatts/Documents/Studio Ops/tasks/dashboard-010-ollama-chat.md`.
+Current Studio Ops task: `/Users/coltonbatts/Documents/Studio Ops/tasks/dashboard-011-journal-recap.md`.
 Handoff: `/Users/coltonbatts/Documents/Studio Ops/handoffs/dashboard.md`.
 
 ## Claude subscription Usage

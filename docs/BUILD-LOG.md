@@ -1,5 +1,41 @@
 # Build log
 
+## Stage 06 — Journal records and local recap · October 6, 2026
+
+Journal now reads only fixed allowlisted project/task Markdown records and generates an explicitly requested local Ollama recap through the existing route. Separate model-authored selection draft with source observations/line references; owner reflection and notes are untouched. Save/history/recovery/export preserve the generated field independently. Explicit copy appends a labeled copy to editable notes. Live free-prose trials overstated older task outcomes; final acceptance therefore validates only model-selected candidate numbers and quotes the original record/owner sentences verbatim. Invented text, invalid/out-of-range/duplicate selections or extra keys are refused; no model prose enters the generated field. UI shows incomplete coverage, Hermes not connected and local processing disclosure. No new model/action authority or changes to Chat, Usage, Launcher, shell, registry, binding mockup or strict CSP.
+
+Connector: thirteen literal paths (BUILD-LOG, Dashboard handoff and eleven selected Dashboard tasks). Authenticated read-only date-only route; no path input or directory scan. Symlink/nonregular/oversized/missing sources are refused per file. Explicit dates rather than mtime scope the excerpts; historical sections excluded; truncation visible. Build/handoff first 3,000 characters, task latest 650. No Hermes session/transcript reads. No automatic model requests, retry, scheduler, voice, retrieval, external provider or packaging.
+
+### Final live evidence and validation
+
+`node bridge/server.mjs`, `http://127.0.0.1:4175/`, Journal date **2026-10-06**. **phi3:mini · generated 2026-10-06T22:49:19.800Z**. Thirteen real allowlisted sources read at **2026-10-06T22:49:19.199Z–2026-10-06T22:49:19.213Z**; paths and exact per-file times, line references, statuses and excerpt limits rendered in the UI. Both owner-authored fields were empty before and after generation; no test/personal text was written into them. Generated result remains an unsaved reviewable browser draft; persistence and export were verified with isolated Demo data.
+
+Exact rendered recap text (actual model-selected source quotes, no paraphrase):
+
+```text
+Model-selected record quotes · reported activity, incomplete coverage
+
+“Live original main verified clean at expected 7ebf1e9; other Dashboard chats idle.” [dashboard-handoff:L5]
+
+“Separate model-authored selection draft with source observations/line references; owner reflection and notes are untouched.” [build-log:L5]
+
+“Initial default-keychain push stalled and was interrupted before publishing; per-command existing gh credential helper plus HTTP/1.1 completed upload.” [dashboard-009-harness-repository:L11]
+
+“Final tests 32/32 pass, diff check clean, index/shell restored exactly, working tree clean.” [dashboard-007-csp-fix:L9]
+```
+
+Full literal rendered field, coverage and candidate input: private git-ignored `.journal/evidence/stage06-recap.json`; screenshot `.journal/evidence/stage06-recap.jpg`. Initial free-prose trials and bounded-selection diagnostics also stay private in that directory. No tokens, credentials, owner entries or raw Studio Ops records committed. The excerpt above contains only selected project-operating statements, not credential values.
+
+**59/59 tests pass** with `node --test harness/tests/*.test.js`. New labeled Demo checks: date/preamble/historical/fenced parsing, latest task excerpts and cut-fragment omission; immutable inventory and fixed-file symlink/directory/size refusal; per-source missing/empty reasons and coverage; HTTP Host/token/Origin/Fetch Metadata refusal before reads, invalid dates/extra path/duplicate query/POST/static refusal; source/owner injection-shaped strings remain JSON data; no-content/oversized prompt refusal before transport; empty/mismatched/malformed/prose/out-of-range/duplicate/extra-key output refusal; visible four-quote cap; mounted Journal authored-field integrity, failed/late-canceled results, duplicate locks, draft recovery and explicit copy; private restart/revision/export preservation. Prior Chat/Usage/Launcher/CSP/security checks pass. Syntax/diff checks pass; those modules, shell/registry, Ollama service and approved mockup unchanged.
+
+Browser: real tags/model choice and recap; empty date 2030-01-01 refuses with all observed source reasons while manual fields remain available; cancel preserves prior generated field and owner words; generated draft survives reload/date switching. Desktop 1200×752 and narrow 390×844 checked; narrow scrollWidth=clientWidth=390. Final warning/error log empty. Browser viewport override reset, deliverable Journal tab and bridge left available. Existing revision/history/save/export behavior verified in private isolated Demo fixtures, not by altering owner entries.
+
+Limits: the installed phi3:mini did not reliably honor free-prose constraints or narrow selections. Final design accepts only validated exact-quote selections; source statements may still be stale/contradictory and are explicitly reported records, not live process/Git facts. At most 24 candidates, 250 characters each, 4,000 characters total candidate JSON; total prompt 6,000 characters, otherwise refused with owner text intact. Partial boundary fragments, long sentences and metadata are omitted; candidate preview and truncation disclosure show this incomplete scope. Model requests ask for four selections; 1–24 unique valid selections are accepted, only the first four rendered with an explicit omitted count if needed. Invalid output leaves the entry untouched; no automatic retry/fallback. Six-second record/model-list requests and existing 120s server/125s browser recap deadlines; cancellation cannot prove model computation stopped. Source reads are sequential rather than an atomic multi-file snapshot, and line references may move after edits. Only local phi3:mini live-tested. Hermes sessions, other projects/chats/transcripts, reminders, voice, retrieval/memory and native packaging remain unconnected/deferred.
+
+Next: Colton reviews/uses Journal's sourced quote recap. A later separately selected stage may improve summarization or verify a supported Hermes source; no later stage started. Commit/push authorized and verified in the Studio Ops task/handoff after this stage commit. No deployment/native install.
+
+
+
 ## Stage 05 — real local Ollama Chat · October 6, 2026
 
 Replaced only Chat's Ollama stub with real local HTTP transport. OpenRouter's exact original STUB receipt/unavailable path remains. Chat owns model discovery/selection, actual assistant output and model provenance; shell edits only correct obsolete truth/help labels. Usage/Launcher/Journal behavior, registry, strict CSP and binding mockup unchanged. Node stdlib only; no build/dependencies, credentials, system settings, downloads, new modules or external-provider requests.

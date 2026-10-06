@@ -5,6 +5,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {BridgeService} from './core.mjs';
 import {OllamaService,validateChat} from './ollama.mjs';
+import {ActivityReader} from './activity.mjs';
 import {JournalStore,validDay} from './journal.mjs';
 const harnessRoot=fileURLToPath(new URL('../harness/',import.meta.url));
 export function authorize(headers,{origin,token},mutation=false){
@@ -14,7 +15,7 @@ export function authorize(headers,{origin,token},mutation=false){
   const supplied=headers['x-bridge-token'];
   return typeof supplied==='string'&&Buffer.byteLength(supplied)===Buffer.byteLength(token)&&timingSafeEqual(Buffer.from(supplied),Buffer.from(token));
 }
-export function createBridge({service=new BridgeService(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
+export function createBridge({service=new BridgeService(),activity=new ActivityReader(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
   const token=randomBytes(32).toString('hex');let origin;
   const server=http.createServer(async(req,res)=>{
     const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"};
@@ -40,6 +41,11 @@ export function createBridge({service=new BridgeService(),ollama=new OllamaServi
           catch(error){if(!res.destroyed)return reply(502,{error:error.message});}
           finally{res.removeListener('close',disconnected);}
           return;
+        }
+        if(req.method==='GET'&&url.pathname==='/api/journal/activity'){
+          const day=url.searchParams.get('day');
+          if([...url.searchParams.keys()].join(',')!=='day'||!validDay(day))return reply(400,{error:'Expected one activity date; no paths accepted'});
+          return reply(200,await activity.snapshot(day));
         }
         if(req.method==='GET'&&url.pathname==='/api/state')return reply(200,await service.state());
         if(req.method==='GET'&&url.pathname==='/api/journal'){

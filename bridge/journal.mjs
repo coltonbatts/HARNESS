@@ -1,8 +1,9 @@
 import {mkdir,readFile,readdir,writeFile,rename,unlink} from 'node:fs/promises';
 import {randomUUID} from 'node:crypto';
 import path from 'node:path';
+import {validGenerated} from '../harness/modules/journal-activity.js';
 import {journalMarkdown} from '../harness/modules/journal-core.js';
-function validInput(input){return input&&Object.keys(input).sort().join(',')==='day,recap,reflection,revision'&&validDay(input.day)&&Number.isSafeInteger(input.revision)&&input.revision>=0&&typeof input.reflection==='string'&&typeof input.recap==='string'&&input.reflection.length<=32000&&input.recap.length<=16000;}
+function validInput(input){return input&&['day,recap,reflection,revision','day,generated,recap,reflection,revision'].includes(Object.keys(input).sort().join(','))&&validDay(input.day)&&Number.isSafeInteger(input.revision)&&input.revision>=0&&typeof input.reflection==='string'&&typeof input.recap==='string'&&input.reflection.length<=32000&&input.recap.length<=16000&&(input.generated===undefined||validGenerated(input.generated,input.day));}
 export function validDay(day){
   if(typeof day!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(day)||Number(day.slice(0,4))<2000)return false;
   const date=new Date(day+'T12:00:00Z');return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===day;
@@ -13,7 +14,7 @@ export class JournalStore{
     if(!validDay(day))throw Error('Invalid journal date');
     try{
       const entry=JSON.parse(await readFile(path.join(this.root,day+'.json'),'utf8'));
-      if(entry?.version!==1||entry.day!==day||!Number.isSafeInteger(entry.revision)||entry.revision<1||typeof entry.reflection!=='string'||typeof entry.recap!=='string'||entry.reflection.length>32000||entry.recap.length>16000||!Number.isFinite(Date.parse(entry.createdAt))||!Number.isFinite(Date.parse(entry.updatedAt)))throw Error('Malformed journal file');
+      if((entry.generated!==undefined&&!validGenerated(entry.generated,day))||entry?.version!==1||entry.day!==day||!Number.isSafeInteger(entry.revision)||entry.revision<1||typeof entry.reflection!=='string'||typeof entry.recap!=='string'||entry.reflection.length>32000||entry.recap.length>16000||!Number.isFinite(Date.parse(entry.createdAt))||!Number.isFinite(Date.parse(entry.updatedAt)))throw Error('Malformed journal file');
       return entry;
     }
     catch(error){if(error.code==='ENOENT')return {version:1,day,revision:0,reflection:'',recap:'',createdAt:null,updatedAt:null};throw error;}
@@ -30,7 +31,7 @@ export class JournalStore{
       if(current.revision!==input.revision)return {status:409,error:'Entry changed elsewhere. Your draft is retained; review the saved entry before replacing it.'};
       await mkdir(this.root,{recursive:true,mode:0o700});
       const at=new Date().toISOString();
-      const entry={version:1,day,revision:current.revision+1,reflection:input.reflection,recap:input.recap,createdAt:current.createdAt||at,updatedAt:at};
+      const entry={version:1,day,revision:current.revision+1,reflection:input.reflection,recap:input.recap,...(input.generated!==undefined?{generated:input.generated}:current.generated!==undefined?{generated:current.generated}:{}),createdAt:current.createdAt||at,updatedAt:at};
       const file=path.join(this.root,day+'.json'),temporary=path.join(this.root,day+'.'+randomUUID()+'.tmp');
       try{await writeFile(temporary,JSON.stringify(entry,null,2)+'\n',{mode:0o600,flag:'wx'});await rename(temporary,file);}
       finally{await unlink(temporary).catch(()=>{});}
