@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>home — desktop</title>
+<style>
+  :root{
+    --bg:rgba(9,12,17,.80);
+    --bd:rgba(150,166,186,.42);
+    --bd2:rgba(150,166,186,.20);
+    --fg:#c9d2de; --dim:#7b8896; --faint:#525d6c;
+    --cyan:#66d9ef; --green:#9ee06a; --yellow:#e6cf74; --orange:#fd971f;
+    --red:#f2607a; --mag:#c79bff; --blue:#7ab6ff;
+    --mono:"SF Mono",ui-monospace,Menlo,Monaco,"JetBrains Mono","Iosevka",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:transparent}
+  body{display:flex;justify-content:flex-start;font-family:var(--mono)}
+
+  .stage{
+    position:relative;width:1200px;height:752px;overflow:hidden;
+    padding:0;display:flex;flex-direction:column;gap:0;
+    background:
+      radial-gradient(1200px 620px at 72% 12%, rgba(126,156,196,.20), transparent 62%),
+      radial-gradient(900px 520px at 16% 86%, rgba(58,78,108,.34), transparent 62%),
+      radial-gradient(700px 400px at 40% 46%, rgba(90,120,150,.10), transparent 60%),
+      linear-gradient(198deg,#2b3646 0%,#1b2230 34%,#101620 66%,#080b11 100%);
+    color:var(--fg);font-size:12px;line-height:1.45;
+  }
+  .stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(closest-side at 50% 45%,transparent 40%,rgba(0,0,0,.55) 100%)}
+
+  /* ── WM bar ── */
+  .wmbar{position:relative;z-index:4;height:24px;display:flex;align-items:center;gap:14px;
+    padding:0 12px;font-size:11px;color:var(--dim);
+    background:rgba(6,8,12,.72);border-bottom:1px solid var(--bd2);
+    backdrop-filter:blur(14px)}
+  .ws{display:flex;gap:9px;align-items:center;letter-spacing:.04em}
+  .ws b{font-weight:400;color:var(--dim)}
+  .ws .cur{color:var(--cyan);border:1px solid rgba(102,217,239,.5);border-radius:2px;padding:0 5px;
+    background:rgba(102,217,239,.12)}
+  .wm-right{margin-left:auto;display:flex;gap:16px;align-items:center}
+  .wm-right .tag{font-size:9.5px;letter-spacing:.16em;color:var(--faint);border:1px solid var(--bd2);
+    border-radius:2px;padding:1px 5px}
+
+  /* ── tiles ── */
+  .grid{position:relative;z-index:3;flex:1;min-height:0;display:grid;
+    grid-template-columns:1.58fr 1fr;grid-template-rows:1fr 1fr;
+    gap:7px;padding:7px 9px 9px}
+  .panel{position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden;
+    background:var(--bg);border:1px solid var(--bd);
+    backdrop-filter:blur(11px) saturate(120%);
+    box-shadow:0 10px 30px -18px rgba(0,0,0,.9)}
+  .chat{grid-row:1 / span 2}
+
+  .tbar{display:flex;align-items:center;gap:0;height:23px;flex:0 0 auto;
+    border-bottom:1px solid var(--bd2);background:rgba(255,255,255,.028);font-size:11px}
+  .tab{padding:0 10px;height:100%;display:flex;align-items:center;color:var(--dim);letter-spacing:.05em}
+  .tab.on{color:#dff7ff;background:rgba(102,217,239,.14);box-shadow:inset 0 -1px 0 var(--cyan)}
+  .tbar .rt{margin-left:auto;padding-right:10px;color:var(--faint);font-size:10px;letter-spacing:.05em;
+    display:flex;gap:12px;align-items:center}
+  .pbody{flex:1;min-height:0;overflow:hidden;padding:9px 11px;display:flex;flex-direction:column;gap:6px}
+
+  .k{color:var(--cyan)}
+  .y{color:var(--yellow)}
+  .gm{color:var(--green)}
+  .dim{color:var(--dim)}
+  .faint{color:var(--faint)}
+  .mut{color:var(--faint)}
+  .ctx{color:var(--faint);font-size:10px;padding-bottom:7px;margin-bottom:auto;
+    border-bottom:1px dashed var(--bd2)}
+
+  /* ── chat ── */
+  .line{display:flex;gap:9px;align-items:flex-start}
+  .who{flex:0 0 52px;font-size:10.5px;letter-spacing:.05em}
+  .who.you{color:var(--blue)}
+  .who.home{color:var(--green)}
+  .ts{flex:0 0 38px;color:var(--faint);font-size:10px;padding-top:1px}
+  .said{color:var(--fg);font-size:12px}
+  .act{border:1px solid rgba(102,217,239,.34);background:rgba(102,217,239,.06);padding:7px 9px;margin-top:2px}
+  .act .h{color:var(--yellow);font-size:10px;letter-spacing:.07em;margin-bottom:5px}
+  .act .cmd{color:#e6fbff;font-size:12px;margin-bottom:4px}
+  .act .f{color:var(--faint);font-size:10px}
+  .btns{display:flex;gap:8px;margin-top:7px;font-size:11px}
+  .btn{color:var(--dim);cursor:pointer}
+  .btn.run{color:#0b0e13;background:var(--green);padding:1px 8px}
+  .btn:hover{color:var(--fg)}
+  .prompt{border-top:1px solid var(--bd2);padding:7px 11px;display:flex;gap:9px;align-items:center;
+    background:rgba(102,217,239,.05);flex:0 0 auto;font-size:12px}
+  .prompt .ar{color:var(--cyan)}
+  .cur{display:inline-block;width:8px;height:13px;background:var(--cyan);animation:bl 1.05s steps(2) infinite;
+    vertical-align:-2px}
+  @keyframes bl{50%{opacity:0}}
+  .prompt .hint{color:var(--faint);font-size:11px}
+  .prompt kbd{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim);
+    border:1px solid var(--bd);padding:1px 6px;border-radius:2px;background:rgba(255,255,255,.04)}
+
+  /* ── usage ── */
+  .uhead{display:flex;color:var(--faint);font-size:10px;letter-spacing:.07em;padding-bottom:4px;
+    border-bottom:1px solid var(--bd2);margin-bottom:2px}
+  .urow{display:flex;align-items:baseline;gap:8px;font-size:11.5px}
+  .urow .lab{flex:1;color:var(--fg)}
+  .urow .lab small{color:var(--faint);font-size:10px;display:block}
+  .g{font-size:11px;letter-spacing:-.5px}
+  .g.on{color:var(--green)}
+  .g.on.c{color:var(--cyan)}
+  .g.on.y{color:var(--yellow)}
+  .g.off{color:#39424f}
+  .val{flex:0 0 44px;text-align:right;font-size:11.5px}
+  .val.c{color:var(--cyan)} .val.y{color:var(--yellow)} .val.n{color:var(--faint)}
+  .urow.foot{border-top:1px solid var(--bd2);margin-top:3px;padding-top:5px}
+  .src{color:var(--faint);font-size:10px}
+
+  /* ── proc / launcher ── */
+  .filter{display:flex;gap:10px;align-items:center;color:var(--faint);font-size:10.5px;
+    padding-bottom:4px;border-bottom:1px solid var(--bd2)}
+  .filter .inp{color:var(--fg);border:1px solid var(--bd2);padding:0 6px;min-width:70px}
+  .filter b{color:var(--cyan);font-weight:400}
+  .prow{display:grid;grid-template-columns:52px 1fr 48px 34px;gap:6px;font-size:11.5px;align-items:baseline}
+  .prow.h{color:var(--faint);font-size:10px;letter-spacing:.07em;border-bottom:1px solid var(--bd2);
+    padding-bottom:3px}
+  .prow .pid{color:var(--faint)}
+  .prow .nm{color:var(--fg)}
+  .prow .nm .sym{color:var(--dim);margin-right:5px}
+  .prow .st{font-size:10.5px}
+  .prow .st.run{color:var(--green)}
+  .prow .st.off{color:var(--faint)}
+  .prow .cpu{text-align:right;color:var(--dim)}
+  .prow.sel{background:rgba(102,217,239,.13);outline:1px solid rgba(102,217,239,.28)}
+  .pfoot{margin-top:auto;border-top:1px solid var(--bd2);padding-top:5px;display:flex;gap:14px;
+    font-size:10px;color:var(--faint)}
+  .pfoot b{color:var(--cyan);font-weight:400}
+  .pfoot .c{margin-left:auto;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- WM bar -->
+  <div class="wmbar">
+    <div class="ws">
+      <b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b><span class="cur">0</span>
+    </div>
+    <span class="tag">HOME · HARNESS</span>
+    <div class="wm-right">
+      <span class="tag">DEMO</span>
+      <span id="clk">— — —</span>
+      <span>⏻</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- CHAT — the harness -->
+    <section class="panel chat">
+      <div class="tbar">
+        <span class="tab on">command</span>
+        <span class="tab">models</span>
+        <span class="rt">
+          <span class="k">◉ ollama</span>
+          <span class="dim">qwen3-coder</span>
+          <span class="faint">34 tok/s</span>
+        </span>
+      </div>
+      <div class="pbody">
+        <div class="ctx">session 14:01 · local · 0 external sessions attached</div>
+        <div class="line">
+          <span class="who you">you</span><span class="ts">14:02</span>
+          <span class="said">Wire the Caption THIS export into the VCR render queue.</span>
+        </div>
+        <div class="line">
+          <span class="who home">home</span><span class="ts">14:02</span>
+          <span class="said">Three steps: emit the EDL from Caption THIS, map
+            <span class="k">prores_422_hq</span> to the VCR profile, then queue
+            <span class="k">job-014</span>.</span>
+        </div>
+        <div class="act">
+          <div class="h">⚠ PROPOSED ACTION — nothing runs without your ok</div>
+          <div class="cmd">▸ vcr queue --edl cap-014.edl --profile prores_422_hq</div>
+          <div class="f">writes 3 files · ~2m40s · vcr 0.9.1</div>
+          <div class="btns">
+            <span class="btn run">[ run ]</span>
+            <span class="btn">[ stage for review ]</span>
+            <span class="btn">[ cancel ]</span>
+          </div>
+        </div>
+      </div>
+      <div class="prompt">
+        <span class="ar">▸</span><span class="cur"></span>
+        <span class="hint">ask anything, or run a command</span>
+        <kbd>⌘ K</kbd>
+      </div>
+    </section>
+
+    <!-- USAGE -->
+    <section class="panel usage">
+      <div class="tbar">
+        <span class="tab on">usage</span>
+        <span class="tab">sources</span>
+        <span class="rt"><span class="faint">3 sources</span></span>
+      </div>
+      <div class="pbody">
+        <div class="uhead"><span style="flex:1">PROVIDER · WINDOW</span><span>REMAINING</span></div>
+
+        <div class="urow">
+          <span class="lab">Anthropic <small>personal · Claude Max · 5-hour</small></span>
+          <span class="g on c">████████████</span><span class="g off">░░░░░░</span>
+          <span class="val c">68%</span>
+        </div>
+        <div class="urow">
+          <span class="lab">Anthropic <small>weekly</small></span>
+          <span class="g on y">████████</span><span class="g off">░░░░░░░░░░</span>
+          <span class="val y">42%</span>
+        </div>
+        <div class="urow">
+          <span class="lab">OpenRouter <small>API · USD · Oct 1–31</small></span>
+          <span class="val y" style="flex:1;text-align:left;font-size:13px">$12.40</span>
+        </div>
+        <div class="urow">
+          <span class="lab">OpenAI <small>ChatGPT plan · no source</small></span>
+          <span class="val n" style="flex:1;text-align:left">UNKNOWN</span>
+        </div>
+        <div class="urow">
+          <span class="lab">Local <small>Ollama · context window</small></span>
+          <span class="g on c">███████</span><span class="g off">░░░░░░░░░░░</span>
+          <span class="val c">37%</span>
+        </div>
+
+        <div class="urow foot"><span class="src">resets 13:00 · 09 Oct 09:00 · America/Chicago</span></div>
+        <div class="urow" style="margin-top:auto">
+          <span class="src faint">unknown is not zero · subscription % and API $ never summed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROC / LAUNCHER -->
+    <section class="panel proc">
+      <div class="tbar">
+        <span class="tab on">launch</span>
+        <span class="tab">proc</span>
+        <span class="rt"><span class="faint">demo state</span></span>
+      </div>
+      <div class="pbody">
+        <div class="filter">
+          <span>#</span><span class="inp">filter</span>
+          <span class="dim">▸ tree ◂</span>
+        </div>
+        <div class="prow h"><span>PID</span><span>PROGRAM</span><span>STATE</span><span>CPU</span></div>
+        <div class="prow sel"><span class="pid">55287</span><span class="nm"><span class="sym">◈</span>Cursor</span><span class="st run">run</span><span class="cpu">2.1</span></div>
+        <div class="prow"><span class="pid">54883</span><span class="nm"><span class="sym">◎</span>ChatGPT</span><span class="st run">run</span><span class="cpu">9.3</span></div>
+        <div class="prow"><span class="pid">—</span><span class="nm"><span class="sym">☿</span>Hermes</span><span class="st off">—</span><span class="cpu">—</span></div>
+        <div class="prow"><span class="pid">—</span><span class="nm"><span class="sym">✳</span>Claude</span><span class="st off">—</span><span class="cpu">—</span></div>
+        <div class="prow"><span class="pid">—</span><span class="nm"><span class="sym">▲</span>Vercel</span><span class="st off">web</span><span class="cpu">—</span></div>
+        <div class="pfoot">
+          <span><b>select</b></span><span>info</span><span>signals</span>
+          <span class="c">6 / 6</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  (function(){
+    function tick(){
+      var d=new Date();
+      var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var t=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      var dt=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getFullYear()).slice(2);
+      document.getElementById('clk').textContent=t+'  '+days[d.getDay()]+'  '+dt;
+    }
+    tick(); setInterval(tick,1000);
+  })();
+</script>
+</body>
+</html>

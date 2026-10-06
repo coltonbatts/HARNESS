@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Colton’s Home · Visual prototype</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<a class="skip" href="#workspace">Skip to workspace</a>
+<div class="shell">
+<aside class="sidebar" aria-label="Workspace navigation">
+<div class="brand"><span class="home-mark">⌂</span><span>colton’s home<small>YOUR WORKSPACE</small></span></div>
+<button class="nav-home" id="home">⌂ <span>Home</span><kbd>⌘ 0</kbd></button>
+<div class="nav-label">YOUR TOOLS <span>04</span></div><nav id="tool-nav"></nav>
+<div class="sidebar-note"><span class="little-sun">✳</span><strong>Room to think.</strong><p>All your tools.<br>One place to come back to.</p></div>
+<button class="palette-launch" id="palette-launch">⌕ <span>Find a tool or action</span><kbd>⌘ K</kbd></button>
+<div class="sidebar-bottom"><span class="avatar">CB</span><span>Colton’s workspace<small>Local visual prototype</small></span></div>
+</aside>
+<div class="main-shell">
+<header class="topbar"><span>Workspace <span class="slash">/</span> <strong>Home</strong></span><div><span class="demo-tag">DEMO MODE</span><span class="version">v0.1 · visual prototype</span></div></header>
+<section class="intro"><div><div class="eyebrow">BACK TO YOUR WORK</div><h1>Welcome home, Colton<span>.</span></h1><p>A little less switching. A little more space to work.</p></div><div class="date">TUESDAY, OCTOBER 6<span>Make yourself at home.</span></div></section>
+<div class="workspace-toolbar"><div class="workspace-label"><span class="dot"></span> Your workspace <span id="layout-label">5 panes</span></div><div class="toolbar-actions"><label for="scene">Demo scenario</label><select id="scene"><option value="mixed">Overview</option><option value="empty">Empty</option><option value="disconnected">Disconnected</option><option value="stale">Stale</option><option value="unavailable">Unavailable</option></select><button id="swap">⇅ Swap rows</button><button id="restore">↺ Restore layout</button></div></div>
+<main id="workspace" tabindex="-1"><div id="tools-grid"></div><div id="column-split" role="separator" aria-label="Resize tool and usage columns" aria-orientation="vertical" tabindex="0" aria-valuemin="54" aria-valuemax="78" aria-valuenow="69"></div><section id="usage" class="pane usage-pane" tabindex="0" aria-label="Model usage pane"></section></main>
+<footer><span><span class="dot muted"></span> Preview only · no apps or accounts connected</span><span>⌘ 1–5 select pane <span class="footer-divider">/</span> ⌘ K commands <span class="footer-divider">/</span> Esc return home</span></footer>
+</div></div>
+<dialog id="preview"><div class="dialog-top"><span class="demo-tag">PREVIEW ACTION</span><button class="icon-button" data-close="preview" aria-label="Close preview">×</button></div><h2 id="preview-title"></h2><p id="preview-copy"></p><div class="preview-detail">This prototype stays inside Home. App opening, account connection, and session control require a verified integration in a later stage.</div><button class="primary" data-close="preview">Back to workspace</button></dialog>
+<dialog id="palette" aria-label="Command palette"><div class="search-row"><span>⌕</span><input id="search" placeholder="Find a tool or action…" aria-label="Search commands" autocomplete="off"><kbd>ESC</kbd></div><div class="command-label">TOOLS & WORKSPACE</div><div id="commands"></div><div class="palette-footer">↑ ↓ navigate <span>↵ select</span></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script></body></html>
