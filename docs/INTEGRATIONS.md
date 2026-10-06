@@ -20,7 +20,7 @@ Fallback: UNKNOWN/unavailable and a direct [Claude Settings > Usage](https://cla
 - Read-only inspection of that installed program confirmed the emitter shape `five_hour: {used_percentage: ..., resets_at: ...}` and `seven_day: {used_percentage: ..., resets_at: ...}`. Version check alone was not treated as evidence of account data.
 - A narrowly scoped read of user settings reported **no user statusLine configured**; no other settings, credentials or histories were printed or used.
 
-The interface exists in the installed version. **A real account payload has not been observed.** Account identity and exact subscription plan remain unverified. Installed program inspection establishes supported code, not runtime account coverage. No inference request was started to populate rate limits.
+The interface exists in the installed version. **A real Claude Code capture has now been observed (2/2 windows), confirmed by Colton and present in the sanitized local file at 2026-10-06T21:02:17.197Z (16:02:17 CDT).** Account identity and exact subscription plan remain unverified. Installed program inspection alone establishes supported code; the subsequent capture establishes aggregate window coverage, not account/plan identity. No inference request was started to populate rate limits.
 
 ## Implemented route and authority
 
@@ -51,9 +51,9 @@ Canonical rows separately contain provider, local scope alias, product, window, 
 
 ## Measured coverage and validation
 
-**Real account coverage: 0/2 windows.** Both render UNKNOWN because no real statusline capture exists. Installed interface: verified statically. Collector parsing/atomic write, adapter normalization, stale/cache/backoff/cancel and failure handling: verified using synthetic inputs in isolated temporary test files, never displayed as live readings. Runtime Claude Code emission and account capacity: unverified.
+**Real account coverage: 2/2 aggregate windows observed.** A real Claude Code capture was confirmed by Colton and the sanitized local file was read during Stage 04: observed_at 2026-10-06T21:02:17.197Z, used 45% five_hour and 22% seven_day (remaining 55% and 78%). These are timestamped historical readings, currently STALE; 2/2 coverage is not 2/2 fresh windows. Account/plan identity remains unverified. No Usage code, source data or cache was changed. Installed interface and collector validation remain as recorded in Stage 02.
 
-No model inference, provider authentication, publication, spending or global configuration change was performed. The first real reading requires Colton's ordinary Claude Code activity in this repo after applicable project trust. Until then the fallback is the correct result. Full check/evidence record: `BUILD-LOG.md`. Stage 03 is not started.
+No model inference, provider authentication, publication, spending or global configuration change was performed. Further fresh readings require ordinary Claude Code statusline updates; stale and unavailable handling remain essential. Full check/evidence record: `BUILD-LOG.md`. Stage 02 acceptance history is preserved there; Stage 04 current status appears below.
 
 ## Stage 03 — browser Launcher (2026-10-06)
 
@@ -84,3 +84,50 @@ The browser tool restriction was not bypassed with another browser, OS launch, h
 ### Failure and truth handling
 
 The route allowlist rejects missing, malformed, mismatched/unknown schemes, wrong route kinds and unexpected destinations. A known missing-app record disables dispatch. At runtime this page cannot reliably distinguish missing app, unhandled scheme, browser blocking or a canceled prompt. Requests remain outcome UNKNOWN until an explicitly labeled user report; report buttons allow “opened”, “blocked” or “nothing opened”, and the last never diagnoses which failure occurred. Reports are in-memory per route and never prove process state. There is no automatic success detector, visibility/blur heuristic, retry or fallback. Repeated requests to the same route are held for one second, then require another user activation. No launch runs on load, filter, selection, timers or disposal.
+
+## Stage 04 — authorized local bridge (current, 2026-10-06)
+
+Run `node bridge/server.mjs` from the checkout. Node stdlib only, no install/dependencies/node_modules. One bridge binds **127.0.0.1:4175 only** and serves existing `harness/`; visit http://127.0.0.1:4175/. The earlier Python command is superseded for normal use (it remains a supported UNKNOWN fallback). This origin has separate browser-local configuration/cache from port 4174. Chat and Usage code and source capture are unchanged.
+
+### Exact authority and allowlist
+
+The only subprocess operations are `execFile('/bin/ps', ['-axo','pid=,stat=,%cpu=,comm=','-ww'], ...)` for read-only snapshots and `execFile('/usr/bin/open', fixedArgv, ...)` for trusted user activation. Both set `shell:false`; no exec/execSync, request-derived command/argv, AppleScript, UI scripting, credentials, provider calls or arbitrary execution. Only these four IDs select a fixed argv:
+
+| ID | Fixed open argv | Exact main executable for observation |
+|---|---|---|
+| cursor | `['-a','/Applications/Cursor.app']` | `/Applications/Cursor.app/Contents/MacOS/Cursor` |
+| claude | `['-a','/Applications/Claude.app']` | `/Applications/Claude.app/Contents/MacOS/Claude` |
+| atlas | `['-a','/Applications/ChatGPT Atlas.app','https://chatgpt.com/']` | `/Applications/ChatGPT Atlas.app/Contents/MacOS/ChatGPT Atlas` |
+| hermes | `['-a','/Applications/Hermes.app']` | `/Applications/Hermes.app/Contents/MacOS/Hermes` |
+
+Installed IDs/versions/executables were re-read from those four plists and all main executable files exist; IDs and versions match Stage 03's table. Atlas remains a URL destination, now explicitly requested in Atlas via `open -a`. This is a new native dispatch route; none of these results proves a custom-scheme handler. There is no default-browser fallback or arbitrary URL/path picker.
+
+### Endpoints and security
+
+- `GET /api/state`: allowlisted main-process measurements (`observed`/`unknown`, running boolean/null, PIDs, individual main-process stat/%CPU, reason, UTC ISO observation timestamp, focus UNKNOWN), plus this run's route verification evidence. The full process table/arguments never leave the bridge; helper processes are excluded.
+- `POST /api/open`: JSON **exactly** `{ "tool": "cursor"|"claude"|"atlas"|"hermes" }`. Returns separate `dispatch` (dispatched/failed, completion timestamp) and post-dispatch `observation` (timestamp/running/UNKNOWN), plus scoped verification. Unknown IDs/extra fields refuse before execution. Requests hold per-tool pending work and a one-second repeat guard. No launch on load, reload, polling, filtering or selection.
+- A fresh 256-bit token is generated per run and inserted only in the served index page's meta element; the page sends it as `X-Bridge-Token`. Never persisted, logged, in a URL, exported with evidence, or included in state/error responses. A restart requires page reload; old tokens fail closed.
+- Both APIs require the exact Host `127.0.0.1:<actual port>`, constant-time token comparison and `Sec-Fetch-Site: same-origin`. POST additionally requires exact `Origin: http://127.0.0.1:<port>`; absent/null/foreign Origin is refused. GET validates Origin if supplied (same-origin GET browsers can omit it). Same-site, cross-site, none and missing fetch metadata refuse for APIs. No CORS allow headers; OPTIONS never grants mutation access.
+- Static requests reject foreign Origin/fetch metadata; canonical real paths remain inside harness, with dotfiles/unknown extensions and symlink escapes refused. Responses use no-store, nosniff, same-origin resource policy, no-referrer and CSP (self scripts/connect, no framing/base/form escape). Token-bearing page cannot be framed. No server uploads/writes.
+- The token protects browser cross-origin writes in combination with Origin/Fetch Metadata, not hostile local software capable of reading local HTTP and forging headers. The source checkout/served same-origin scripts are trusted. This is an explicit local capability, not public/network authorization. [Node execFile documentation](https://nodejs.org/api/child_process.html#child_processexecfilefile-args-options-callback), [MDN Fetch Metadata](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Fetch_metadata) and [CSRF](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF) support the chosen mechanics.
+
+### Observation semantics, focus and failure
+
+Exact executable equality avoids helper/name/argument false positives. `run` means a non-zombie main process was observed, not connected, responsive or focused. A successful process snapshot with no match reports observed absent; failed/empty/malformed snapshots report UNKNOWN (never absent/zero). CPU is ps %CPU per main process only, not a live whole-app total; absent CPU is UNKNOWN. PIDs are real or null/absent, never seeded. Observation persists only in memory; exported evidence is a dated snapshot.
+
+Focus probe: `/bin/ps -L` enumerated available fields and `pid/stat/%cpu/comm` was examined. No reliable frontmost/focused application field exists there; process stat/terminal foreground flags are not GUI focus. Node stdlib supplies no AppKit frontmost interface. No AppleScript/UI scripting was used. **Focus remains UNKNOWN for all routes.** Dispatch verification is bounded to exit-0 plus subsequent exact executable presence; it does not prove a window was displayed, existing instance focused, new process causally launched or Atlas loaded its URL.
+
+ps timeout 3s; open timeout 5s; bounded post-dispatch probes at most three (250ms waits, no additional launch). Concurrent ps reads coalesce. Launcher refreshes every 5s, coalesces pending reads, bounds requests at 6s and validates measurements (including 15s expiry). On network/auth/parse failure it drops current observed values to UNKNOWN, preserving dated dispatch receipts separately. No automatic activation retry or silent URL fallback after a bridge failure. Without a page token (file/plain server), the original browser links and UNKNOWN measurements remain. Disposal cancels polling/fetches; an already submitted native dispatch cannot be undone by a client abort. User reports stay explicitly separate from measured process state.
+
+### Actual per-route evidence
+
+Activation used the served page's trusted user buttons. First run: before activation Cursor and Atlas were absent; Claude PID 12566 and Hermes PID 71781 were present. Cursor then appeared as PID 21234 after exit-0 dispatch at 16:21:38 CDT. The final build was restarted and tested again (verification is per run):
+
+| Route | Final build observation on Oct 6 (America/Chicago) | Status and limits |
+|---|---|---|
+| Cursor fixed app path | Dispatch completed 16:29:25; exact executable PID 21234 observed afterward | Verified dispatch + running; focus UNKNOWN; final test reused existing instance |
+| Claude fixed app path | Dispatch completed 16:29:26; exact executable PID 12566 observed afterward | Verified dispatch + running; already running, focus UNKNOWN |
+| Hermes fixed app path | Dispatch completed 16:29:26; exact executable PID 71781 observed afterward | Verified dispatch + running; already running, focus UNKNOWN; no agent prompt sent |
+| ChatGPT HTTPS URL in Atlas | `open` failed, exit 1 at 16:29:26; successful ps snapshot found no exact executable afterward | Dispatch unavailable in this installation; native route unverified; URL load/focus unverified. No system repair, reinstall or alternate route attempted |
+
+`evidence/bridge-state.json` contains sanitized UTC process/route evidence from the final run (`bridge-state-initial.json` preserves the first run); screenshots record the final UI and failed Atlas dispatch. Cross-origin/token/unknown-tool rejection is proven with isolated HTTP integration tests and an injected executor count (zero rejected activations), not by a malicious live launch. Plain-server and stopped-bridge fallback were checked in the browser. Stage 03 HTTPS navigation evidence remains historical and does not upgrade Atlas native dispatch.

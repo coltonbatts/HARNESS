@@ -179,11 +179,13 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 .launcher-table-head{color:var(--dim);border-bottom:1px solid var(--bd2);padding-bottom:4px}
 .launcher-row{padding:3px 0}
 .launcher-row.sel{background:rgba(102,217,239,.13);outline:1px solid rgba(102,217,239,.28)}
-.launcher-row a{color:var(--fg);text-decoration:none;overflow-wrap:anywhere}
-.launcher-row a:focus-visible{outline:1px solid var(--cyan)}
+.launcher-row a,.launcher-row button{color:var(--fg);text-decoration:none;overflow-wrap:anywhere}
+.launcher-row a:focus-visible,.launcher-row button:focus-visible{outline:1px solid var(--cyan)}
 .launcher-row a[aria-disabled=true]{color:var(--dim)}
 #launcher-info{white-space:pre-line;overflow-wrap:anywhere}
 .launcher-feedback{font-size:10px;color:var(--yellow)}
 .launcher-reports{display:flex;gap:6px;flex-wrap:wrap;font-size:10px}
 .layout-chat .proc{display:none}
 @media(max-width:900px){.proc{min-height:340px}}
+
+.launcher-row button{border:0;background:transparent;padding:0;text-align:left;font:inherit;cursor:pointer}

@@ -1,0 +1,132 @@
+{
+  "observedAt": "2026-10-06T21:29:44.163Z",
+  "tools": [
+    {
+      "id": "cursor",
+      "status": "observed",
+      "observedAt": "2026-10-06T21:29:44.163Z",
+      "running": true,
+      "pids": [
+        21234
+      ],
+      "processes": [
+        {
+          "pid": 21234,
+          "stat": "S",
+          "cpuPercent": 1.1
+        }
+      ],
+      "reason": "Exact main executable match; running means non-zombie process present, not connected",
+      "focus": {
+        "status": "unknown",
+        "value": null,
+        "reason": "ps has no reliable frontmost application field; no UI scripting used"
+      }
+    },
+    {
+      "id": "claude",
+      "status": "observed",
+      "observedAt": "2026-10-06T21:29:44.163Z",
+      "running": true,
+      "pids": [
+        12566
+      ],
+      "processes": [
+        {
+          "pid": 12566,
+          "stat": "S",
+          "cpuPercent": 0.3
+        }
+      ],
+      "reason": "Exact main executable match; running means non-zombie process present, not connected",
+      "focus": {
+        "status": "unknown",
+        "value": null,
+        "reason": "ps has no reliable frontmost application field; no UI scripting used"
+      }
+    },
+    {
+      "id": "atlas",
+      "status": "observed",
+      "observedAt": "2026-10-06T21:29:44.163Z",
+      "running": false,
+      "pids": [],
+      "processes": [],
+      "reason": "No exact main executable match in successful process snapshot",
+      "focus": {
+        "status": "unknown",
+        "value": null,
+        "reason": "ps has no reliable frontmost application field; no UI scripting used"
+      }
+    },
+    {
+      "id": "hermes",
+      "status": "observed",
+      "observedAt": "2026-10-06T21:29:44.163Z",
+      "running": true,
+      "pids": [
+        71781
+      ],
+      "processes": [
+        {
+          "pid": 71781,
+          "stat": "S",
+          "cpuPercent": 0
+        }
+      ],
+      "reason": "Exact main executable match; running means non-zombie process present, not connected",
+      "focus": {
+        "status": "unknown",
+        "value": null,
+        "reason": "ps has no reliable frontmost application field; no UI scripting used"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "id": "cursor",
+      "route": "open -a Cursor.app",
+      "verification": "verified-dispatch-and-running",
+      "evidence": {
+        "dispatchAt": "2026-10-06T21:29:25.679Z",
+        "observedAt": "2026-10-06T21:29:25.806Z",
+        "pids": [
+          21234
+        ],
+        "reason": "Dispatch completed and exact executable was subsequently present; existing instance vs newly launched and focus not distinguished"
+      }
+    },
+    {
+      "id": "claude",
+      "route": "open -a Claude.app",
+      "verification": "verified-dispatch-and-running",
+      "evidence": {
+        "dispatchAt": "2026-10-06T21:29:26.117Z",
+        "observedAt": "2026-10-06T21:29:26.189Z",
+        "pids": [
+          12566
+        ],
+        "reason": "Dispatch completed and exact executable was subsequently present; existing instance vs newly launched and focus not distinguished"
+      }
+    },
+    {
+      "id": "atlas",
+      "route": "ChatGPT URL in Atlas",
+      "verification": "unverified",
+      "evidence": null
+    },
+    {
+      "id": "hermes",
+      "route": "open -a Hermes.app",
+      "verification": "verified-dispatch-and-running",
+      "evidence": {
+        "dispatchAt": "2026-10-06T21:29:26.494Z",
+        "observedAt": "2026-10-06T21:29:26.571Z",
+        "pids": [
+          71781
+        ],
+        "reason": "Dispatch completed and exact executable was subsequently present; existing instance vs newly launched and focus not distinguished"
+      }
+    }
+  ]
+}

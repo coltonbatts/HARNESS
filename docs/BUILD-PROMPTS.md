@@ -78,7 +78,24 @@ Record actual observations and limits in INTEGRATIONS.md, BUILD-LOG.md and share
 Studio Ops records; commit this stage. Stop before stage 04 or native packaging.
 ```
 
-## 04 and later — one selected module per stage
+## 04 — Local bridge milestone (explicitly authorized)
+
+```text
+Use one Node stdlib process bound only to 127.0.0.1 to serve harness and expose
+GET /api/state and POST /api/open. Only fixed execFile argv for ps and allowlisted
+app/URL activation; no shell, arbitrary commands, AppleScript or UI scripting.
+Require a per-run page token, exact Host/Origin and same-origin fetch metadata.
+Prove refusal before execution. Match real main executables, timestamp observed
+values, preserve UNKNOWN on failure and never infer focus/connection from PID.
+Keep dispatch separate from subsequent observation. User activation only, one-
+second repeat guard and user-report path. Chat and Usage code stay unchanged.
+Degrade to UNKNOWN without the bridge; preserve static files and binding design.
+Test normalization, unknown, allowlist/security rejection, dispatch vs observation,
+repeat guard and fallback; record actual routes/limits and corrected Usage coverage.
+Commit, then stop. Do not start Stage 05 or expand the bridge's authority.
+```
+
+## 05 and later — one selected module per stage
 
 ```text
 Select one next module with Colton and document its useful workflow, capabilities,
