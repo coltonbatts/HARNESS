@@ -2,7 +2,7 @@
 
 The shell is a stable frame; modules own their behavior. The binding visual target for this and later stages is `design/home-harness-mockup.html`, copied unchanged from the approved Studio Ops artifact. The old five-pane prototype is superseded and retained in `prototype/`.
 
-This stage runs as a dependency-free browser app in `harness/`. Native packaging and provider access are unimplemented. Usage and Launcher tiles are labeled design previews, not registered integrations. Only Chat is registered.
+This stage runs as a dependency-free browser app in `harness/`. Native packaging and provider access are unimplemented. Chat and Claude subscription Usage are registered. Launcher remains a labeled design preview. Claude Code statusline support is verified in installed version 2.1.287; actual account payload coverage is 0/2 windows. See INTEGRATIONS.md.
 
 ## Boundary
 
@@ -37,8 +37,18 @@ Chat owns backend selection, separate in-memory conversations, text-prefix rende
 - A send records the user's actual input, locks duplicate sends and backend switching, and returns a labeled transport receipt. Cancellation is local; unavailable is a labeled test outcome. No automatic retries or fallback between providers. Disposal cancels pending input.
 - Backend/source output is inert text via `textContent`. It cannot authorize actions. Slash commands are an allowlist: `/help`, `/layout reset`; unsupported commands are rejected. Arbitrary shell execution is absent.
 - `/layout reset` drafts a local action naming the storage key and effect. `[ stage for review ]` keeps it in the tile; `[ cancel ]` writes nothing; `[ run ]` writes only the selected layout. This block is authored by the shell, never inferred from chat output.
-- Usage figures and process values are DEMO. UNKNOWN is not zero, API dollars and subscription percentages remain separate, run is not connected. Usage sources: 0. Launcher execution: absent.
+- Usage now shows only real local Claude subscription readings or UNKNOWN; no demo gauges or other providers. Process values remain DEMO. UNKNOWN is not zero; run is not connected. Real subscription payloads observed: 0. Launcher execution: absent.
 
 ## Stage acceptance
 
 Prove both backend stub paths through the bottom command input; separate histories, pending lock, cancel, explicit unavailable/recovery, literal text rendering, reload without resend, layout persistence, and proposed action run/cancel. Check registry failure isolation and malformed state recovery. Document native/live integration limitations. Add only one module in each later authorized stage.
+
+## Usage module — Stage 02
+
+`usageModule` declares `id:usage`, version 1, read-local-snapshot/refresh/cancel/open-usage-page capabilities, source configuration, initial awaiting-data availability, authority and an explicit error list. It mounts only in `#usage-slot` through the existing registry. Shell changes are restricted to import/register/mount/dispose and replacing that preview slot; Chat files and command routing are unchanged.
+
+Usage has no primary command routing; its required `submit` is a no-op. It owns rendering, local snapshot fetch, refresh state, last-good cache, source disclosure and read-only external usage link. Configuration and authority are exported on the module and detailed in INTEGRATIONS.md. It reads the allowlisted collector file, uses its own `home-claude-usage-v1` cache, and never touches shell/Chat state or another tile's DOM. Invalid cached data is ignored.
+
+Canonical measurements use independent five_hour/seven_day rows with provider/account/product, used/remaining percent, unknown start, supplied end/reset, UTC ISO observation/reset, local source method, authoritative/unavailable confidence and available/stale/unavailable status. No estimates, manual rows, model allocations or other providers. Identity remains unverified; source alias is not a discovered account.
+
+`dispose()` clears the age/refresh timer, aborts in-flight work and releases the tile. Refresh floor 30s with bounded exponential failure backoff to 300s, timeout 5s, no overlap, explicit cancel. Missing/failed windows preserve individual last-good data as stale with original age; reset expiration never manufactures fresh capacity. No credentials, account changes, provider requests, process execution or app embedding. See BUILD-LOG.md for measured evidence and limits.

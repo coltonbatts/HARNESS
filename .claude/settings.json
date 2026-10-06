@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node '/Users/coltonbatts/Documents/ChatGPT/DASHBOARD/scripts/claude-statusline.mjs'"
+  }
+}

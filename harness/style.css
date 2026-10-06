@@ -161,3 +161,14 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 .preview .pbody{overflow:auto}
 .wmbar{flex-shrink:0}
 @media(max-width:900px){.wmbar{white-space:nowrap;font-size:9px}.wmbar h1{font-size:9px}.wmbar .ws>.dim{display:none}.wmbar .wm-right{gap:4px}.wmbar button{font-size:9px}}
+
+/* Usage module only. */
+.usage .pbody{overflow:auto}
+.usage-measurement{padding:6px 0 9px;border-bottom:1px solid var(--bd2)}
+.usage-measurement .src{white-space:pre-line;margin-top:5px;overflow-wrap:anywhere}
+.usage-value{min-width:60px;text-align:right;font-size:11px}
+.usage-actions{display:flex;gap:7px;flex-wrap:wrap;font-size:10px;margin-top:auto}
+.usage-actions a{color:var(--cyan);text-decoration:none}
+.layout-chat .usage{display:none}
+
+@media(max-width:900px){.usage{min-height:300px}}

@@ -1,5 +1,53 @@
 # Build log
 
+## Stage 02 — Claude subscription Usage · October 6, 2026
+
+Completed only the registered Usage module for **Claude subscription 5-hour + weekly windows**. Replaced its design preview; no other provider or API-dollar reading. Chat source files, registry, command input routing, Launcher implementation and binding mockup are unchanged. Shell edits are only import/register/mount/dispose for Usage; layout boundaries are retained.
+
+### Checkpoint and implementation
+
+First created root checkpoint **`b1f8cbd`**, `[codex] Checkpoint stage 01 prototype and harness shell with Chat`, covering all existing planning, prototype and harness files before Stage 02 edits. The Stage 02 commit includes this record; its hash is recorded in Studio Ops after commit creation. No push/deployment.
+
+Run remains `python3 -m http.server 4174 --bind 127.0.0.1 --directory harness`; open http://127.0.0.1:4174. Existing server retained and deliverable browser tab left open.
+
+- `usageModule` registered through the existing version-1 registry, with declared capabilities/configuration/availability/errors/authority and disposal in `harness/modules/usage.js`; contract documented in MODULE-CONTRACT.md.
+- `usage-core.js` normalizes separate provider/account/product/window measurements with explicit used/remaining percent, supplied end/reset, unknown start, UTC observation/reset, local source method and authoritative/unavailable confidence. Missing values never coerce to zero. No inferred model allocations.
+- `scripts/claude-statusline.mjs` reads documented stdin only, validates and allowlists the two window pairs, drops all other payload fields, atomically writes a 0600 sanitized local file. Runtime captures are git-ignored. Project `.claude/settings.json` configures this collector; no global Claude configuration/credentials changed. Runtime Claude invocation is unverified; command uses this checkout's absolute path and requires node on PATH.
+- Local same-origin fetch only; credentials omitted. 30-second minimum refresh, exponential failure backoff to 5 minutes, bounded Retry-After handling, 5-second timeout, no overlap, explicit cancel and disposal abort. Missing/failed/older windows retain individual last-good readings stale with original age. Five-minute TTL/reset expiry also mark stale. Rereading a file never changes its observation timestamp.
+- Browser cache stores only whitelisted individual observations and starts stale on reload. Invalid cache ignored; storage failure reported. Sources disclosure explains interface and account limits; direct Claude usage link supplies the fallback.
+
+Research preceded implementation. Colton explicitly answered **Yes, I use Claude Code**. `claude --version` returned 2.1.287; installed program inspection confirmed the two documented emitter field shapes. No existing user statusLine was configured. Official sources and precise evidence are in INTEGRATIONS.md. Correction recorded there: current Spend Limits API serves Claude Enterprise organizations, so the requested blanket “API billing only” claim is too broad. None of the three organization APIs supplies consumer subscription capacity; none was used.
+
+### Verification evidence
+
+| Check | Result |
+| --- | --- |
+| Full Node suite | **16/16 pass** — 5 unchanged Chat/registry tests + 11 Usage checks |
+| Missing/null/malformed | Absent, null, string, boolean, NaN/Infinity/out-of-range percentages → unavailable/null; explicit 0/100 remain valid |
+| Window/time validation | Invalid observation/calendar dates, timezone-less/future timestamps, malformed/reset-expired/out-of-window resets rejected; no invented start |
+| Timezone | Chicago daylight-saving and standard time produce CDT/CST; persisted observations normalize to UTC ISO |
+| Scope/cache | Duplicate measurements deduplicated; partial/older windows retain stale last good; separate original timestamps survive cache |
+| Stale/offline/auth/429 | Failures preserve data, release pending state, respect backoff; same old capture stays stale; TTL and reset expiration tested |
+| Cancel/timeout/dispose | No overlapping refresh; cancel aborts, disposed source stops; even a source ignoring abort cannot hang past timeout |
+| Backoff | 30/60/120/240/300/300 second sequence; reads blocked before next permitted time |
+| Source fetch | Same-origin data file, no-store, credentials omitted, passed abort signal; HTTP missing/auth/429, malformed JSON, offline failures handled without leaking exception detail |
+| Collector | Synthetic documented input written to isolated temporary file, only allowed fields survive, malformed/missing windows null; test files removed |
+| Browser live fallback | Exactly 5-hour and weekly rows UNKNOWN; 0/2 fresh windows; no other Usage provider or demo quota |
+| Browser sources/link | Source limitations visible; direct link href verified as https://claude.ai/settings/usage; no external navigation performed |
+| Failure isolation | Chat still returned its honest STUB receipt alongside unavailable Usage |
+| Narrow 390×844 | Scroll width equals viewport width (390); input bottom 827px remains in viewport; Usage visible/scrollable |
+| Desktop 1200×752 | Binding tile proportions preserved, bottom input visible; sources tab works |
+| Console/syntax/diff | Checked browser warning/error list empty; JS syntax checks and git diff --check pass |
+| Preservation | `git diff` confirms Chat files, registry and binding mockup unchanged |
+
+Screenshots: `docs/evidence/usage-unknown.jpg`, `usage-sources.jpg`, `usage-narrow.jpg`. Numeric/failed/stale scenarios were tested with synthetic inputs in isolated Node tests, never presented in the browser as live capacity. A test-helper default incorrectly replaced undefined with 32; corrected the fixture to explicitly assign undefined, then all checks passed. No provider data was invented to make the UI populated.
+
+### Actual coverage and limits
+
+**Real account readings observed: 0/2 windows.** Installed interface existence is verified statically; installed runtime delivery of a real account payload is unverified. The project collector is configured for ordinary Claude Code activity in this repo and normal trust/settings precedence. No model request was launched to obtain a reading. Until such a payload arrives both rows correctly stay UNKNOWN, with direct usage-page action. Exact plan/account identity and window starts remain unknown. “Authoritative” is local-interface provenance, not independent billing verification; capture age cannot reveal the upstream age of cached data inside Claude Code.
+
+No cookies scraped/decrypted, no session credentials reused/extracted, no undocumented authenticated endpoints, no provider billing access, no external app embedding/control, no sessions invented, no publication/spending/credential/permission changes, no global settings changes or agents. No manual snapshot UI added. Native packaging remains unimplemented. Stage 03 not started. Next action: user review / normal Claude Code use here to observe a real payload; any broader capture scope or next module is a separate request.
+
 ## Stage 01 — harness reset: shell + Chat · October 6, 2026
 
 Completed the authorized shell and first module only. Runnable dependency-free web shell in `harness/`; native Mac packaging remains unimplemented. Old `prototype/` and its evidence are preserved. The approved mockup is copied byte-for-byte to `docs/design/home-harness-mockup.html` and binds this and later stages. No rejected glass mockup was used.
