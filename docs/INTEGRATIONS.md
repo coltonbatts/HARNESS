@@ -54,3 +54,33 @@ Canonical rows separately contain provider, local scope alias, product, window, 
 **Real account coverage: 0/2 windows.** Both render UNKNOWN because no real statusline capture exists. Installed interface: verified statically. Collector parsing/atomic write, adapter normalization, stale/cache/backoff/cancel and failure handling: verified using synthetic inputs in isolated temporary test files, never displayed as live readings. Runtime Claude Code emission and account capacity: unverified.
 
 No model inference, provider authentication, publication, spending or global configuration change was performed. The first real reading requires Colton's ordinary Claude Code activity in this repo after applicable project trust. Until then the fallback is the correct result. Full check/evidence record: `BUILD-LOG.md`. Stage 03 is not started.
+
+## Stage 03 — browser Launcher (2026-10-06)
+
+This stage is a browser page. It can request navigation on trusted user activation; it cannot open/focus apps through a native API or inspect processes. PID, STATE and CPU are always UNKNOWN, including after an outcome report. `run` does not mean connected. No helper, child process, AppleScript, credential access or app embedding was added. [MDN URI schemes](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes) describes URL routing; [web protocol handlers](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler) do not provide native process observation.
+
+Read-only verification of each `/Applications/<name>.app/Contents/Info.plist` on this machine:
+
+| Installed app | Bundle ID | Version | Declared schemes | Launcher destination |
+|---|---|---|---|---|
+| Cursor | com.todesktop.230313mzl4w4u92 | 3.22.7 | cursor | cursor:// |
+| Claude | com.anthropic.claudefordesktop | 2.19675.1 | claude; msauth.com.anthropic.claudefordesktop | claude:// |
+| ChatGPT Atlas | com.openai.atlas | 1.2025.337.4 | com.openai.atlas; openai; http; https; file | https://chatgpt.com/ |
+| Hermes | com.nousresearch.hermes | 0.0.0 | hermes | hermes:// |
+
+Installed identity/version and scheme declarations are verified metadata, not working-handler evidence. The installation record is dated, not a live browser inventory. Native routes use bare roots without file/task arguments. Atlas is expressly a URL target: the browser controls where HTTPS opens. The module does not use `openai://` or claim Atlas activation; [Atlas browsing documentation](https://help.openai.com/en/articles/12628371-browsing-the-web-with-chatgpt-atlas) identifies the product as a browser.
+
+### Actual route observations
+
+| Route | Test performed | Observed result | Verification |
+|---|---|---|---|
+| cursor:// | Tried clicking the Launcher link using the in-app browser tool | Tool blocked custom-scheme navigation before dispatch; page still showed no activation outcome and report buttons disabled | Handler/focus unverified; automation unavailable |
+| claude:// | Installation metadata read; keyboard filter selected/focused its link, without activation | Correct link and selection visible; custom-scheme activation not attempted after the browser restriction | Handler/focus unverified |
+| hermes:// | Installation metadata read; End + Enter selected/focused its link, without activation | Correct link and selection visible; custom-scheme activation not attempted after the browser restriction | Handler/focus unverified |
+| https://chatgpt.com/ | Clicked the Launcher URL link | New in-app browser tab loaded signed-out ChatGPT, title “ChatGPT: Chat, Work, Create & Code with AI”; source tile reported URL requested, not success | URL load verified; Atlas activation unverified |
+
+The browser tool restriction was not bypassed with another browser, OS launch, helper or indirect execution. Colton said he will test the three native links and report each route. Those results are pending. Screenshot `evidence/launcher-url-destination.jpg` records the HTTPS destination. No prompt or credentials were submitted; the test-created destination tab was closed.
+
+### Failure and truth handling
+
+The route allowlist rejects missing, malformed, mismatched/unknown schemes, wrong route kinds and unexpected destinations. A known missing-app record disables dispatch. At runtime this page cannot reliably distinguish missing app, unhandled scheme, browser blocking or a canceled prompt. Requests remain outcome UNKNOWN until an explicitly labeled user report; report buttons allow “opened”, “blocked” or “nothing opened”, and the last never diagnoses which failure occurred. Reports are in-memory per route and never prove process state. There is no automatic success detector, visibility/blur heuristic, retry or fallback. Repeated requests to the same route are held for one second, then require another user activation. No launch runs on load, filter, selection, timers or disposal.

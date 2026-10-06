@@ -1,9 +1,10 @@
 import { ModuleRegistry, readConfig } from './registry.js';
 import { chatModule } from './modules/chat.js';
 import { usageModule } from './modules/usage.js';
+import { launcherModule } from './modules/launcher.js';
 let storage; try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Storage unavailable'); } }; }
 const config = readConfig(storage);
-const registry = new ModuleRegistry(); registry.register(chatModule); registry.register(usageModule);
+const registry = new ModuleRegistry(); registry.register(chatModule); registry.register(usageModule); registry.register(launcherModule);
 const input = document.querySelector('#command');
 const grid = document.querySelector('#grid');
 function layout() {
@@ -23,6 +24,7 @@ const chat = registry.mount('chat', document.querySelector('#chat-slot'), {
   setPending: pending => { document.querySelector('#send').disabled = pending; }
 });
 const usage = registry.mount('usage', document.querySelector('#usage-slot'), { notify() {} });
+const launcher = registry.mount('launcher', document.querySelector('#launcher-slot'), { notify() {} });
 function proposeReset() {
   chat.propose?.({ command: '/layout reset', effects: 'writes browser-local home-harness-v1 layout=tiled only · no files, processes, or provider calls', run: () => save({ layout: 'tiled' }) });
 }
@@ -44,16 +46,6 @@ document.addEventListener('keydown', event => {
 });
 function tick() { document.querySelector('#clk').textContent = new Date().toLocaleString('en-GB', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', weekday: 'short', day: '2-digit', month: '2-digit' }) + ' CT'; }
 tick(); const clock = setInterval(tick, 1000);
-window.addEventListener('pagehide', () => { clearInterval(clock); chat.dispose(); usage.dispose(); }, { once: true });
-const demoProcesses = [ ['55287','Cursor','run','2.1'], ['54883','ChatGPT','run','9.3'], ['—','Hermes','—','—'], ['—','Claude','—','—'], ['—','Vercel','web','—'], ['—','Ollama','—','—'] ];
-function processes() {
-  const query = document.querySelector('#filter').value.toLowerCase();
-  const rows = demoProcesses.filter(row => row[1].toLowerCase().includes(query));
-  const list = document.querySelector('#processes'); list.replaceChildren();
-  rows.forEach((row, index) => {
-    const line = document.createElement('div'); line.className = 'prow' + (index === 0 ? ' sel' : '');
-    row.forEach((value, col) => { const cell = document.createElement('span'); cell.className = ['pid', 'nm', 'st ' + (value === 'run' ? 'run' : 'off'), 'cpu'][col]; cell.textContent = value; line.append(cell); }); list.append(line);
-  });
-  document.querySelector('#process-count').textContent = `${rows.length} / ${demoProcesses.length}`;
-}
-document.querySelector('#filter').oninput = processes; processes(); layout();
+window.addEventListener('pagehide', () => { clearInterval(clock); chat.dispose(); usage.dispose(); launcher.dispose(); }, { once: true });
+
+layout();

@@ -172,3 +172,18 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 .layout-chat .usage{display:none}
 
 @media(max-width:900px){.usage{min-height:300px}}
+
+/* Launcher module: honest unknown process columns and browser route links. */
+.proc .pbody{overflow:auto}
+.launcher-table-head,.launcher-row{display:grid;grid-template-columns:54px minmax(90px,1fr) 60px 54px;gap:6px;font-size:10px;align-items:baseline}
+.launcher-table-head{color:var(--dim);border-bottom:1px solid var(--bd2);padding-bottom:4px}
+.launcher-row{padding:3px 0}
+.launcher-row.sel{background:rgba(102,217,239,.13);outline:1px solid rgba(102,217,239,.28)}
+.launcher-row a{color:var(--fg);text-decoration:none;overflow-wrap:anywhere}
+.launcher-row a:focus-visible{outline:1px solid var(--cyan)}
+.launcher-row a[aria-disabled=true]{color:var(--dim)}
+#launcher-info{white-space:pre-line;overflow-wrap:anywhere}
+.launcher-feedback{font-size:10px;color:var(--yellow)}
+.launcher-reports{display:flex;gap:6px;flex-wrap:wrap;font-size:10px}
+.layout-chat .proc{display:none}
+@media(max-width:900px){.proc{min-height:340px}}

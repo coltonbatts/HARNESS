@@ -61,14 +61,21 @@ Done: one Usage module with measured coverage and evidence; stop.
 ## 03 — Launcher module only
 
 ```text
-Inspect only selected installed app versions/locations and the target native bridge
-environment. Prove supported Open/focus routes before implementation. Register
-Launcher through the contract, replacing only its process-table design preview.
-Report observed PID/state/CPU only when reliable, with freshness; otherwise UNKNOWN.
-Keep run distinct from connected. Implement only verified open/focus capability,
-with app-picker/missing target handling and keyboard filtering/selection.
-Test already-running focus, missing/relocated apps, denied open and repeated actions.
-Done: one Launcher module with supported access and explicit limits; stop.
+This harness is a browser page. No native bridge, helper, child_process or osascript
+this stage. Inspect selected installed metadata read-only, then prove each URL
+scheme route before claiming it works. A declaration is not handler evidence.
+Register Launcher through the contract, replacing only its process-table preview.
+Keep Chat and Usage unchanged. Request navigation only on trusted user activation.
+ChatGPT Atlas is an HTTPS URL target; do not claim native activation or choose the
+browser from JavaScript. PID/state/CPU are always UNKNOWN with the browser reason;
+remove demo process values. Run is not connected and neither is observable here.
+Label per-route verified/unverified/unavailable evidence and unknown outcomes.
+Handle unavailable configuration, blocked/unhandled navigation and repeated requests
+without automatic success or retries. Add accessible keyboard filtering/selection.
+Test route selection, missing/unknown schemes, repeated activation, filtering and
+keyboard selection, and that process state is never reported as known.
+Record actual observations and limits in INTEGRATIONS.md, BUILD-LOG.md and shared
+Studio Ops records; commit this stage. Stop before stage 04 or native packaging.
 ```
 
 ## 04 and later — one selected module per stage

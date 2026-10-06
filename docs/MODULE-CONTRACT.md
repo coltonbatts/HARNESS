@@ -37,7 +37,7 @@ Chat owns backend selection, separate in-memory conversations, text-prefix rende
 - A send records the user's actual input, locks duplicate sends and backend switching, and returns a labeled transport receipt. Cancellation is local; unavailable is a labeled test outcome. No automatic retries or fallback between providers. Disposal cancels pending input.
 - Backend/source output is inert text via `textContent`. It cannot authorize actions. Slash commands are an allowlist: `/help`, `/layout reset`; unsupported commands are rejected. Arbitrary shell execution is absent.
 - `/layout reset` drafts a local action naming the storage key and effect. `[ stage for review ]` keeps it in the tile; `[ cancel ]` writes nothing; `[ run ]` writes only the selected layout. This block is authored by the shell, never inferred from chat output.
-- Usage now shows only real local Claude subscription readings or UNKNOWN; no demo gauges or other providers. Process values remain DEMO. UNKNOWN is not zero; run is not connected. Real subscription payloads observed: 0. Launcher execution: absent.
+- Usage now shows only real local Claude subscription readings or UNKNOWN; no demo gauges or other providers. Launcher process values are always UNKNOWN. UNKNOWN is not zero; run is not connected. Native activation outcomes remain unverified; documented route evidence is separate from process state.
 
 ## Stage acceptance
 
@@ -52,3 +52,9 @@ Usage has no primary command routing; its required `submit` is a no-op. It owns 
 Canonical measurements use independent five_hour/seven_day rows with provider/account/product, used/remaining percent, unknown start, supplied end/reset, UTC ISO observation/reset, local source method, authoritative/unavailable confidence and available/stale/unavailable status. No estimates, manual rows, model allocations or other providers. Identity remains unverified; source alias is not a discovered account.
 
 `dispose()` clears the age/refresh timer, aborts in-flight work and releases the tile. Refresh floor 30s with bounded exponential failure backoff to 300s, timeout 5s, no overlap, explicit cancel. Missing/failed windows preserve individual last-good data as stale with original age; reset expiration never manufactures fresh capacity. No credentials, account changes, provider requests, process execution or app embedding. See BUILD-LOG.md for measured evidence and limits.
+
+## Launcher module — Stage 03
+
+`launcherModule` declares identity `launcher`, version 1, filter/keyboard-select/request-url/report-outcome capabilities, dated installation/configuration record, URL-verified/native-unverified availability, explicit errors and authority. Registered/mounted through the existing registry into only `#launcher-slot`. Chat and Usage implementations and command routing are unchanged. Required `submit()` is a no-op: Launcher input is its own labeled filter and links.
+
+Authority is trusted user anchor navigation only. The module owns selection and in-memory request/user-report outcomes; there is no process observation, credential access, native bridge, helper, app control, automatic retry or stored sessions. `dispose()` releases the tile and its element handlers; there are no timers or pending native operations to cancel. Route status separates installation declaration, URL load evidence, unknown activation outcome and user report. PID/STATE/CPU remain UNKNOWN for every route and outcome. Atlas is a URL target, not a native app activation. See INTEGRATIONS.md for actual evidence and the native verification limitation.
