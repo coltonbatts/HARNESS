@@ -1,5 +1,7 @@
 # Home module contract — version 1
 
+Current Stage 05: four registered modules; local Ollama Chat is real, OpenRouter remains STUB. The Stage 05 contract below supersedes the original Chat stub snapshot and acceptance statements. Earlier stage records remain historical.
+
 The shell is a stable frame; modules own their behavior. The binding visual target for this and later stages is `design/home-harness-mockup.html`, copied unchanged from the approved Studio Ops artifact. The old five-pane prototype is superseded and retained in `prototype/`.
 
 This stage runs as a dependency-free browser app in `harness/`. Native packaging and provider access are unimplemented. Chat and Claude subscription Usage are registered. Launcher remains a labeled design preview. Claude Code statusline support is verified in installed version 2.1.287; actual account payload coverage is 0/2 windows. See INTEGRATIONS.md.
@@ -76,3 +78,11 @@ Journal owns per-day reflection and user-authored activity notes, browser recove
 `/api/journal/export` POST writes current text to a private dated Markdown export, replacing that day's previous export. Browser fallback renders copyable literal Markdown on unavailable export. All asynchronous requests have a six-second timeout and are aborted on disposal. Save errors leave text and available recovery drafts intact. A timed-out POST may already have saved; no automatic retry is performed. View-saved/return-to-draft lets the user inspect an intervening revision before saving recovered text over it. Browser draft failures are reported; file saves remain available.
 
 No Hermes data, generated recap, provider call, memory promotion or scheduler is implemented. The module does not access another module's state or DOM. No delete API. See DAILY-JOURNAL.md for implemented scope and remaining product direction.
+
+## Stage 05 — selected Chat upgrade (implementation contract)
+
+Useful workflow: bottom command input sends the selected local model an in-memory Chat conversation and displays only the actual returned assistant content. Chat v1 adds model-list/model-select capabilities; Ollama is live-or-unavailable, OpenRouter remains STUB with its original receipt. Only backend/layout persist; model choice and transcripts are tab-local. Completed exchanges for the selected model supply conversation context; failed/canceled inputs never resend. Output remains inert text, never actions.
+
+One authenticated bridge route `/api/ollama`: GET reads only fixed `http://127.0.0.1:11434/api/tags`; POST sends only fixed `/api/chat`, non-streaming, with validated `{model,messages}`. No URLs, tools, credentials, arbitrary options, downloads, shell or system configuration. Tags are checked again before sending; cloud/remote models are refused. Strict CSP and existing token/Host/Origin/Fetch Metadata protections remain. Limits: 200,000 request bytes, 199 messages, 32,000 characters per message, 2 MiB upstream response, 120s chat/5s tags server deadlines; browser 125s chat/6s tags. Disconnect aborts upstream; cancellation cannot prove Ollama stopped computing.
+
+Errors retain observed upstream HTTP/error details, connection codes, timeout or user-cancel; malformed, incomplete, empty or thinking-only replies are UNKNOWN/error, never empty success. Requested and returned model recorded separately; a changed model is not silently accepted. No automatic retries/fallback. Discovery on mount is read-only; explicit refresh permits manual recovery. Disposal aborts discovery and pending chat. Acceptance: live bottom-bar round trip with model evidence; Demo fixtures exercise refusal/failure/cancel/locking/context, existing full suite; unchanged other modules/design; documentation then commit/push and stop.

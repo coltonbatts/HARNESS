@@ -1,0 +1,15 @@
+{
+  "source": "Actual running app via bottom command bar; read from rendered DOM, not a fixture run",
+  "observedLocalDate": "2026-10-06",
+  "sentLocalTime": "17:09 CDT",
+  "replyObservedLocalTime": "17:10 CDT",
+  "url": "http://127.0.0.1:4175/",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "requestedModel": "phi3:mini",
+  "result": {
+    "type": "model-output",
+    "model": "phi3:mini",
+    "content": " 4"
+  },
+  "prompt": "What is 2 + 2? Reply with one short sentence."
+}

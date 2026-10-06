@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ChatController, stubSend } from '../modules/chat-core.js';
 import { ModuleRegistry, readConfig } from '../registry.js';
-test('both backend flows produce honest receipts with isolated history', async () => {
-  const chat = new ChatController();
+test('Demo historical stub backend flows produce honest receipts with isolated history', async () => {
+  const chat = new ChatController({ transport: stubSend });
   await chat.send('local input');
   assert.match(chat.conversations.ollama[0].receipt, /STUB.*Ollama.*No provider contacted; no model output/);
   chat.switchBackend('openrouter'); assert.equal(chat.conversations.openrouter.length, 0);
@@ -11,7 +11,7 @@ test('both backend flows produce honest receipts with isolated history', async (
   assert.match(chat.conversations.openrouter[0].receipt, /STUB.*OpenRouter/);
   assert.equal(chat.conversations.ollama[0].text, 'local input');
 });
-test('pending duplicate rejected, switching locked, cancellation never resends', async () => {
+test('Demo stub pending duplicate rejected, switching locked, cancellation never resends', async () => {
   let calls = 0;
   const chat = new ChatController({ transport: args => { calls++; return stubSend(args); } });
   const first = chat.send('one');
@@ -21,8 +21,8 @@ test('pending duplicate rejected, switching locked, cancellation never resends',
   assert.equal(chat.conversations.ollama[0].status, 'canceled'); assert.equal(calls, 1); assert.equal(chat.pending, null);
   chat.switchBackend('openrouter');
 });
-test('unavailable transport releases input and retains explicit error', async () => {
-  const chat = new ChatController(); await chat.send('test', 'unavailable');
+test('Demo stub unavailable transport releases input and retains explicit error', async () => {
+  const chat = new ChatController({ transport: stubSend }); await chat.send('test', 'unavailable');
   assert.equal(chat.conversations.ollama[0].status, 'error'); assert.match(chat.conversations.ollama[0].receipt, /STUB.*No provider contacted/); assert.equal(chat.pending, null);
   await chat.send('manual retry'); assert.equal(chat.conversations.ollama[1].status, 'receipt');
 });

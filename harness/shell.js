@@ -36,7 +36,7 @@ function proposeReset() {
 document.querySelector('#command-form').addEventListener('submit', event => {
   event.preventDefault(); if (document.querySelector('#send').disabled) return;
   const text = input.value.trim(); if (!text) return;
-  if (text === '/help') chat.notify?.('Local commands: /help · /journal · /layout reset. Other slash commands are unsupported; ordinary text goes to the selected STUB backend. Cmd/Ctrl+K focuses input; Alt+0 tiles; Alt+1 focuses Chat; Alt+2 focuses Journal.');
+  if (text === '/help') chat.notify?.('Local commands: /help · /journal · /layout reset. Other slash commands are unsupported; ordinary text goes to the selected Chat backend (Ollama local / OpenRouter STUB). Cmd/Ctrl+K focuses input; Alt+0 tiles; Alt+1 focuses Chat; Alt+2 focuses Journal.');
   else if (text === '/journal') { save({ layout: 'journal' }); journal.submit(); }
   else if (text === '/layout reset') proposeReset();
   else if (text.startsWith('/')) chat.notify?.('Unsupported command. Nothing executed. Use /help.');

@@ -4,6 +4,7 @@ import {readFile,realpath,stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {BridgeService} from './core.mjs';
+import {OllamaService,validateChat} from './ollama.mjs';
 import {JournalStore,validDay} from './journal.mjs';
 const harnessRoot=fileURLToPath(new URL('../harness/',import.meta.url));
 export function authorize(headers,{origin,token},mutation=false){
@@ -13,7 +14,7 @@ export function authorize(headers,{origin,token},mutation=false){
   const supplied=headers['x-bridge-token'];
   return typeof supplied==='string'&&Buffer.byteLength(supplied)===Buffer.byteLength(token)&&timingSafeEqual(Buffer.from(supplied),Buffer.from(token));
 }
-export function createBridge({service=new BridgeService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
+export function createBridge({service=new BridgeService(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
   const token=randomBytes(32).toString('hex');let origin;
   const server=http.createServer(async(req,res)=>{
     const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"};
@@ -23,6 +24,23 @@ export function createBridge({service=new BridgeService(),root=harnessRoot,journ
       const url=new URL(req.url,origin);
       if(url.pathname.startsWith('/api/')){
         if(!authorize(req.headers,{origin,token},req.method==='POST'))return reply(403,{error:'Bridge authorization refused'});
+        if(url.pathname==='/api/ollama'&&['GET','POST'].includes(req.method)){
+          if(url.search)return reply(400,{error:'Ollama route accepts no query parameters'});
+          let input;
+          if(req.method==='POST'){
+            if(req.headers['content-type']!=='application/json')return reply(415,{error:'JSON required'});
+            const chunks=[];let bytes=0;
+            for await(const chunk of req){bytes+=chunk.length;if(bytes>200000)return reply(413,{error:'Body too large'});chunks.push(chunk);}
+            try{input=validateChat(JSON.parse(Buffer.concat(chunks).toString()));}catch(error){return reply(400,{error:error.message});}
+          }
+          const abort=new AbortController();
+          const disconnected=()=>{if(!res.writableEnded)abort.abort();};
+          res.on('close',disconnected);
+          try{return reply(200,await (req.method==='GET'?ollama.tags(abort.signal):ollama.chat(input,abort.signal)));}
+          catch(error){if(!res.destroyed)return reply(502,{error:error.message});}
+          finally{res.removeListener('close',disconnected);}
+          return;
+        }
         if(req.method==='GET'&&url.pathname==='/api/state')return reply(200,await service.state());
         if(req.method==='GET'&&url.pathname==='/api/journal'){
           if(!url.search)return reply(200,{days:await journal.list()});
