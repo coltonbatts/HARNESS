@@ -108,3 +108,13 @@ test('Demo browser source unavailable/unauthorized/oversized/malformed states re
  for(const text of ['{bad','x'.repeat(65537)])await assert.rejects(makeCodexSource('Demo',async()=>({ok:true,text:async()=>text}))({}),e=>e.kind==='malformed');
  await assert.rejects(makeCodexSource('Demo',async()=>({ok:true,text:async()=>JSON.stringify({status:'unavailable',reason:'Demo daemon unavailable'})}))({}),/Demo daemon unavailable/);
 });
+
+test('Demo ten-second polling obtains new observations in browser and bridge, retaining failure backoff',async()=>{
+ let time=now,reads=0;
+ const service=new CodexUsageService({now:()=>time,connection:()=>({open:async()=>{reads++;},initialize:async()=>{},request:async m=>m==='account/read'?{account:{}}:m==='account/rateLimits/read'?{rateLimits:{...rates(),primary:{...rates().primary,usedPercent:20+reads}}}:{},close(){}})});
+ const controller=createCodexController({now:()=>time,source:()=>service.snapshot()});
+ await controller.refresh();assert.equal(controller.nextRefresh-time,10000);assert.equal(service.nextRefresh-time,10000);assert.equal(controller.rows[0].remaining,79);
+ const first=controller.rows[0].observed_at;time+=9999;assert.equal(await controller.refresh(),false);await service.snapshot();assert.equal(reads,1);assert.equal(controller.rows[0].observed_at,first);
+ time++;await controller.refresh();assert.equal(reads,2);assert.equal(controller.rows[0].remaining,78);assert.equal(Date.parse(controller.rows[0].observed_at)-Date.parse(first),10000);
+ controller.source=async()=>{throw Error('Demo offline');};time+=10000;await controller.refresh();assert.equal(controller.nextRefresh-time,30000);assert.equal(controller.rows[0].remaining,78);assert.equal(freshness(controller.rows[0],time),'stale');controller.dispose();
+});

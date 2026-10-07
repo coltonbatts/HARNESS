@@ -77,8 +77,8 @@ export function makeLocalSource(fetchImpl = fetch) {
   };
 }
 export class UsageController {
-  constructor({source, now=Date.now, onChange=()=>{}, cached=null, save=()=>{}, timeoutMs=5000,normalize=normalizeSnapshot,initialRows=WINDOWS.map(unknown),decode=decodeCache}) {
-    this.normalize=normalize;this.timeoutMs=timeoutMs; this.source=source; this.now=now; this.onChange=onChange; this.save=save;
+  constructor({source, now=Date.now, onChange=()=>{}, cached=null, save=()=>{}, timeoutMs=5000,pollIntervalMs=30000,normalize=normalizeSnapshot,initialRows=WINDOWS.map(unknown),decode=decodeCache}) {
+    this.normalize=normalize;this.timeoutMs=timeoutMs;this.pollIntervalMs=pollIntervalMs; this.source=source; this.now=now; this.onChange=onChange; this.save=save;
     this.rows=initialRows; this.error=''; this.pending=null; this.failures=0; this.nextRefresh=0; this.disposed=false;
     if (cached) this.rows=decode(cached,now());
   }
@@ -95,7 +95,7 @@ export class UsageController {
       const available=this.rows.some(row=>row.remaining !== null);
       const missing=rows.some(row=>row.remaining === null);
       this.failures=missing ? this.failures+1 : 0;
-      this.nextRefresh=this.now()+(missing ? Math.min(300_000,30_000*2**Math.min(this.failures-1,4)) : 30_000);
+      this.nextRefresh=this.now()+(missing ? Math.min(300_000,30_000*2**Math.min(this.failures-1,4)) : this.pollIntervalMs);
       this.error=missing ? 'Some subscription windows absent or malformed' : '';
       // Preserve last good windows independently in a whitelisted cache.
       if (available) this.save(this.rows);

@@ -8,6 +8,7 @@ import {BridgeService} from './core.mjs';
 import {OllamaService,validateChat} from './ollama.mjs';
 import {ActivityReader} from './activity.mjs';
 import {JournalStore,validDay} from './journal.mjs';
+import {attachBtop} from './btop.mjs';
 const harnessRoot=fileURLToPath(new URL('../harness/',import.meta.url));
 export function authorize(headers,{origin,token},mutation=false){
   if(headers.host!==new URL(origin).host)return false;
@@ -16,10 +17,10 @@ export function authorize(headers,{origin,token},mutation=false){
   const supplied=headers['x-bridge-token'];
   return typeof supplied==='string'&&Buffer.byteLength(supplied)===Buffer.byteLength(token)&&timingSafeEqual(Buffer.from(supplied),Buffer.from(token));
 }
-export function createBridge({codexUsage=new CodexUsageService(),service=new BridgeService(),activity=new ActivityReader(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
-  const token=randomBytes(32).toString('hex');let origin;
+export function createBridge({btopSpawn,codexUsage=new CodexUsageService(),service=new BridgeService(),activity=new ActivityReader(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
+  const token=randomBytes(32).toString('hex'),styleNonce=randomBytes(24).toString('base64');let origin;
   const server=http.createServer(async(req,res)=>{
-    const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"};
+    const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':`default-src 'self'; script-src 'self'; style-src 'self' 'nonce-${styleNonce}'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'`};
     function reply(code,body,type='application/json'){res.writeHead(code,{...headers,'Content-Type':type});res.end(type==='application/json'?JSON.stringify(body):body);}
     try{
       if(!origin||req.headers.host!==new URL(origin).host)return reply(403,{error:'Host refused'});
@@ -97,15 +98,17 @@ export function createBridge({codexUsage=new CodexUsageService(),service=new Bri
       const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json'};
       const type=types[path.extname(resolved)];if(!type)return reply(404,{error:'File unavailable'});
       let data=await readFile(resolved);
-      if(resolved===path.join(base,'index.html'))data=Buffer.from(data.toString().replace('</head>',`<meta name="bridge-token" content="${token}"></head>`));
+      if(resolved===path.join(base,'index.html'))data=Buffer.from(data.toString().replace('</head>',`<meta name="bridge-token" content="${token}"><meta name="terminal-style-nonce" content="${styleNonce}"></head>`));
       res.writeHead(200,{...headers,'Content-Type':type});res.end(req.method==='HEAD'?undefined:data);
     }catch{return reply(500,{error:'Bridge request failed'});}
   });
   server.requestTimeout=10000;server.headersTimeout=10000;
-  return {server,listen(port=4175){return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',()=>{origin=`http://127.0.0.1:${server.address().port}`;resolve(origin);});});}};
+  const btop=attachBtop(server,{getOrigin:()=>origin,token,spawn:btopSpawn});
+  server.on('close',()=>btop.dispose());
+  return {server,btop,listen(port=4175){return new Promise((resolve,reject)=>{server.once('error',reject);server.listen(port,'127.0.0.1',()=>{origin=`http://127.0.0.1:${server.address().port}`;resolve(origin);});});}};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const bridge=createBridge();
   bridge.listen().then(origin=>console.log(`Harness bridge: ${origin} (loopback only)`)).catch(()=>{console.error('Bridge could not bind 127.0.0.1:4175; no fallback address used');process.exitCode=1;});
-  for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>bridge.server.close(()=>process.exit(0)));
+  for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{bridge.btop.dispose();bridge.server.close(()=>process.exit(0));});
 }

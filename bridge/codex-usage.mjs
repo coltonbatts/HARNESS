@@ -86,7 +86,7 @@ export class CodexUsageService{
     if(!account||!account.account)throw Error('Codex unavailable: daemon reports unauthenticated');
     const rates=sanitizeRateLimits(await c.request('account/rateLimits/read',READ_PARAMS['account/rateLimits/read']));
     let usage,usageReason='';try{usage=sanitizeTokenUsage(await c.request('account/usage/read',READ_PARAMS['account/usage/read']));}catch(e){usage=sanitizeTokenUsage(null);usageReason=e.message;}
-    this.failures=0;this.nextRefresh=this.now()+30000;
+    this.failures=0;this.nextRefresh=this.now()+10000;
     this.last={schema:1,source:'codex-app-server',scope:'account-wide Codex subscription',observed_at:new Date(this.now()).toISOString(),status:'available',rates,usage,usageReason,reason:'',nextRefresh:this.nextRefresh,notificationObserved:c.changed};
    }catch(e){this.failures++;this.nextRefresh=this.now()+Math.min(300000,30000*2**Math.min(this.failures-1,4));this.last={schema:1,source:'codex-app-server',scope:'account-wide Codex subscription',...this.last,status:'unavailable',reason:e.message,nextRefresh:this.nextRefresh};}
    finally{c.close();this.pending=null;}

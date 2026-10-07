@@ -34,5 +34,5 @@ export function makeCodexSource(token,fetcher=(...args)=>fetch(...args)){
   return data;
  };
 }
-export function createCodexController(options){return new UsageController({...options,timeoutMs:10000,normalize:normalizeCodex,initialRows:['primary','secondary'].map(codexUnknown),decode:decodeCodexCache});}
+export function createCodexController(options){return new UsageController({...options,timeoutMs:10000,pollIntervalMs:10000,normalize:normalizeCodex,initialRows:['primary','secondary'].map(codexUnknown),decode:decodeCodexCache});}
 export function codexWindowLabel(row){return row.duration===300?'Codex · 5-hour':row.duration===10080?'Codex · weekly · 7-day':row.duration?`Codex · ${row.duration} min`:`Codex · ${row.window} · duration UNKNOWN`;}

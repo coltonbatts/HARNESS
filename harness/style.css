@@ -193,13 +193,13 @@ h1{font-size:11px;font-weight:400;letter-spacing:.06em}
 
 /* Journal fits below Chat; focus workspace 2 leaves room to reflect. */
 .chat{grid-column:1;grid-row:1}
-.journal{grid-column:1;grid-row:2}
+.journal{display:none;grid-column:1;grid-row:2}
 .usage{grid-column:2;grid-row:1}
 .proc{grid-column:2;grid-row:2}
 .layout-chat .chat{grid-row:1 / -1}
 .layout-chat .journal{display:none}
 .layout-journal .panel:not(.journal){display:none}
-.layout-journal .journal{grid-column:1 / -1;grid-row:1 / -1}
+.layout-journal .journal{display:flex;grid-column:1 / -1;grid-row:1 / -1}
 .layout-journal:has(#proposal:not(:empty)) .chat{display:flex;position:absolute;inset:7px 9px 9px;z-index:5;background:#000}
 .journal-body{overflow:auto;gap:7px}
 .journal-nav,.journal-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:10px}
@@ -258,3 +258,24 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 *{scrollbar-width:thin;scrollbar-color:#444 #000}
 @media(max-width:900px){.wmbar h1{letter-spacing:.06em}.wmbar h1::before{margin-right:5px}.grid{gap:8px;padding:8px}.pbody{padding:10px}.prompt{margin:0 8px 8px}}
 @media(forced-colors:active){.stage::after{display:none}}
+
+/* Real BTOP has its own full-size workspace, preserving usable terminal geometry. */
+.btop{display:flex;grid-column:1;grid-row:2;min-width:0}
+.layout-chat .btop{display:none}
+#btop-back{display:none}
+.layout-btop #btop-back{display:inline}
+.layout-btop #btop-expand{display:none}
+.layout-btop{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);overflow:hidden}
+.layout-btop .panel:not(.btop){display:none}
+.layout-btop .btop{display:flex;grid-column:1 / -1;grid-row:1 / -1;min-height:0}
+#btop-terminal{flex:1;min-height:0;min-width:0;padding:0;overflow:auto;background:#000}
+#btop-terminal .xterm{height:100%;min-width:0;padding:6px}
+#btop-terminal .xterm-viewport{overflow:hidden}
+.btop-foot{flex:0 0 auto;border-top:1px solid var(--bd2);padding:3px 9px;font-size:10px;color:var(--dim)}
+.btop .tbar .rt{gap:10px}
+#btop-status{letter-spacing:0;overflow-wrap:anywhere}
+@media(max-width:600px){.btop .tbar{height:auto;min-height:28px;flex-wrap:wrap}.btop .tbar .rt{gap:6px;font-size:9px;flex-wrap:wrap}.btop-foot{font-size:9px}}
+
+.layout-btop:has(#proposal:not(:empty)) .chat{display:flex;position:absolute;inset:7px 9px 9px;z-index:5;background:#000}
+
+@media(max-width:900px){.btop{grid-column:1;grid-row:auto;min-height:380px;order:1}.layout-btop .btop{min-height:0}}

@@ -1,5 +1,14 @@
 # Build log
 
+## Stage 09 follow-up — readout verification and ten-second refresh · October 7, 2026
+
+Colton requested verification of actual readouts and refresh every 5–10 seconds. Successful browser checks (Codex and Claude capture) and the Codex bridge cache now use a 10-second interval; the one-second scheduler and request duration can add a small delay. Failure backoff remains 30–300 seconds, with no overlap/cancellation and original observation times preserved. Claude checks reread its local file; they cannot manufacture a fresh provider capture.
+
+Direct allowed official daemon rate-limit read at 14:57:20 CDT matched the rendered Plus windows: primary used40% / remaining60%, 300 minutes, reset Oct7 18:01 CDT; secondary used11% / remaining89%, 10080 minutes, reset Oct14 02:23 CDT. Remaining is 100 minus explicit usedPercent. Raw reset epochs from adjacent daemon reads differed by one second for weekly; the displayed Chicago minute agrees. Bridge live observations advanced from 19:57:36.330Z to 19:57:48.271Z (11.941s) during the running page’s automatic polling; percentages remained40/11, so unchanged percentages do not imply a cached observation. Evidence: evidence/stage09-refresh.json and stage09-refresh.png. Claude remains correctly STALE at original Oct6 16:02 CDT, used45/22%; account USD still UNKNOWN. No credentials/private sessions/identifiers or broader methods accessed.
+
+81/81 tests pass ordinarily and at both controlled Chicago midnight dates (2026-10-07T04:59:59Z / 05:00:00Z). Added meaningful Demo browser+bridge timing/new-observation and preserved failure-backoff verification. Diff check clean, live browser console warnings/errors empty. Verified project bridge restarted on4175 (PID34922), page reloaded for new token; deliverable tab retained. Follow-up changes saved uncommitted over c1d8e10, no push. Writing ownership released; next action Colton reviews faster live readouts. No next stage started.
+
+
 ## Stage 09 — Colton-selected Codex usage + destination · October 7, 2026
 
 Completed only the custom Stage 09 in original HARNESS main, starting at bffe45b with accepted Stage 08 uncommitted work preserved. Sole writer Codex chat 01a117cd-12e9-7ab0-8584-9c944aa58181; prior writer released, other Dashboard chats idle/notLoaded, one worktree. Task Studio Ops dashboard-015-codex-usage. This stage replaces the plan's Stage 09 slot; shell/settings moves to the next slot and remains unimplemented. User's Done criterion authorizes a local [codex] commit; no push/delegation/later stage.
@@ -344,3 +353,19 @@ User authorized implementation. Added fourth module with reflection/activity-not
 36/36 Node tests passed, including restart persistence, concurrent-edit refusal, malformed date/path/body refusal, private file modes, malformed existing-file preservation, authorized API/export and midnight/DST dates. Existing CSP/bridge/module regression checks pass. Browser verified in an isolated temporary journal store: save/edit/reload, draft recovery, view-saved/return-to-draft, past-date/history navigation, literal script-like text, export receipt and actual Markdown file, layout reset preserving text, stopped bridge save retaining text and copyable export fallback. Desktop 1200×752 and narrow 390×844 checked; no horizontal document overflow at narrow width. Screenshot: docs/evidence/journal-desktop.png (real app, empty entry).
 
 Initial blob download did not yield a download completion in embedded browser; replaced with explicit local Markdown export and path receipt. Temporary test server stopped and its browser tab closed. Real bridge restarted at 127.0.0.1:4175 and Journal left open. Pending: automatic recaps, supported Hermes activity connector, real model transport/retrieval, voice and reminder timing/delivery. No reminder installed or external content sent. Files remain uncommitted; no push/deployment.
+
+## Real BTOP window · October 7, 2026
+
+User-requested actual installed btop added in workspace3 / Alt+3 / /btop. Fixed executable PTY with local xterm + fit renderer, keyboard/mouse/resize, Start/Stop/back-to-tiles, live PID/errors/quit and disconnect/heartbeat/shutdown cleanup. Root package lock and npm-ci setup added; terminal assets/MIT licenses checked in. Strict loopback Origin/Host/per-run-token WebSocket boundary; no arbitrary executable/argv/shell proxy. CSP retains no unsafe-inline: guarded build gives dynamic xterm styles nonce and uses property-based colors. macOS packaged spawn-helper permission corrected in node_modules by root postinstall. BTOP.md records exact authority/lifecycle/install.
+
+85/85 full tests pass; new meaningful websocket refusal/lifecycle/startup-race tests plus existing suite. Actual installed1.4.6 PTY q exit; actual browser live graphs/colors/PID, native menu, Stop/reopen, resize1200×800 +390×844 with terminal-local scrolling/no document overflow, console warnings/errors empty. Evidence evidence/btop-live.jpg. Current checkout main e9f882d; prior usage-refresh changes preserved, all BTOP work uncommitted. No commit/push/delegation. Local4175 bridge restarted to current code and preview retained.
+
+BTOP follow-up: user requested replacing workspace0 Journal tile. Lower-left is now live BTOP, starts in tiled view without stealing focus, compact type/expand to same-session workspace3. Journal preserved on workspace2. 85/85 tests pass; real UI verified Journal route, tile live PID74446, expand/back same PID and clean console. Evidence evidence/btop-tiled.jpg, viewport reset, page0 preview retained. No commit/push; earlier changes preserved.
+
+## GitHub synchronization and laptop setup — October 7, 2026
+
+User authorized publication of all current project work and an updated README. Included real BTOP tile/full workspace, terminal dependencies/lockfile/vendor assets and licenses, ten-second successful usage refresh, and existing visual/verification evidence. README now describes current behavior, fresh-Mac dependency setup, machine-specific Claude/Studio Ops paths, local-only data, and update/restart steps. Native packaging and cross-platform/laptop execution remain unverified.
+
+Verification: 85/85 tests pass at ordinary time and both controlled Chicago midnight dates (2026-10-07T04:59:59Z and 2026-10-07T05:00:00Z); terminal assets rebuild successfully; diff whitespace checks pass. Private journal, registrations, usage captures and node_modules remain excluded by Git ignore rules.
+
+A clean export of the staged source installed successfully with `npm ci` (7 packages, audit reported 0 vulnerabilities) and passed all 85 tests. This validates repository-contained dependencies/assets on the current Mac; it does not establish laptop or other operating-system validation.

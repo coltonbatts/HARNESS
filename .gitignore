@@ -3,3 +3,4 @@ harness/data/*.tmp
 .journal/
 
 .launcher/
+node_modules/

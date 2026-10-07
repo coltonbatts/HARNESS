@@ -4,7 +4,7 @@ export const usageModule = {
   id:'usage',version:1,title:'Subscription Usage',
   capabilities:['read-local-snapshot','refresh','cancel','open-usage-page'],
   availability:'local-Claude-capture-and-Codex-daemon',
-  configuration:{providers:['Anthropic','OpenAI'],products:['Claude subscription','Codex subscription'],windows:['five_hour','seven_day','primary','secondary'],sources:['data/claude-usage.json','/api/usage/codex'],pollIntervalMs:30_000,staleAfterMs:300_000},
+  configuration:{providers:['Anthropic','OpenAI'],products:['Claude subscription','Codex subscription'],windows:['five_hour','seven_day','primary','secondary'],sources:['data/claude-usage.json','/api/usage/codex'],pollIntervalMs:10_000,staleAfterMs:300_000},
   authority:'Read sanitized Claude capture and fixed read-only local Codex daemon account/usage protocol; browser-local last-good caches. No credential access, account changes, session reads or model calls.',
   errors:['unavailable','malformed','offline','auth','rate_limit','timeout','canceled'],
   mount(root) {
@@ -12,7 +12,7 @@ export const usageModule = {
     const find=id=>root.querySelector(`#${id}`);
     let storage,cached,storageFailed=false;
     try { storage=window.localStorage; cached=JSON.parse(storage.getItem('home-claude-usage-v1')); } catch {}
-    const controller=new UsageController({source:makeLocalSource(),cached,save:rows=>{
+    const controller=new UsageController({pollIntervalMs:10000,source:makeLocalSource(),cached,save:rows=>{
       try { storage?.setItem('home-claude-usage-v1',JSON.stringify(encodeCache(rows))); if (!storage) storageFailed=true; }
       catch { storageFailed=true; }
     },onChange:render});

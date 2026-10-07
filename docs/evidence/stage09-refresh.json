@@ -1,0 +1,44 @@
+{
+  "checked_at": "2026-10-07T19:57:48.823Z",
+  "source": "live official local Codex daemon through bridge",
+  "normalRefreshMs": 10000,
+  "observations": [
+    {
+      "observed_at": "2026-10-07T19:57:36.330Z",
+      "rates": {
+        "planType": "plus",
+        "primary": {
+          "usedPercent": 40,
+          "windowDurationMins": 300,
+          "resetsAt": 1791414091
+        },
+        "secondary": {
+          "usedPercent": 11,
+          "windowDurationMins": 10080,
+          "resetsAt": 1791962594
+        }
+      },
+      "status": "available",
+      "nextRefresh": 1791403066330
+    },
+    {
+      "observed_at": "2026-10-07T19:57:48.271Z",
+      "rates": {
+        "planType": "plus",
+        "primary": {
+          "usedPercent": 40,
+          "windowDurationMins": 300,
+          "resetsAt": 1791414091
+        },
+        "secondary": {
+          "usedPercent": 11,
+          "windowDurationMins": 10080,
+          "resetsAt": 1791962594
+        }
+      },
+      "status": "available",
+      "nextRefresh": 1791403078271
+    }
+  ],
+  "observationDeltaMs": 11941
+}
