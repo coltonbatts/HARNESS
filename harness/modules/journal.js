@@ -3,12 +3,12 @@ import {journalDay,journalMarkdown} from './journal-core.js';
 export const journalModule={
   id:'journal',version:1,title:'Journal',capabilities:['daily-capture','local-file-save','history','export','read-selected-records','local-model-recap'],availability:'local-bridge-required-for-files',
   authority:'Read/write dated journal files through authenticated local bridge. Browser recovery drafts. Read fixed selected project records; explicit local Ollama recap. No external memory writes.',
-  mount(root){
+  mount(root,{now=()=>new Date()}={}){
     root.innerHTML=`<div class="tbar"><span class="tab on">journal</span><span class="rt">LOCAL · CT</span></div><div class="pbody journal-body"><div class="journal-nav"><button id="journal-today">[ today ]</button><label for="journal-date" class="src">Entry</label><input id="journal-date" type="date" min="2000-01-01" aria-label="Journal date"><select id="journal-history" aria-label="Saved journal history"><option value="">history</option></select></div><p class="journal-question">What’s on your mind after today?</p><label for="journal-reflection" class="src">MY REFLECTION</label><textarea id="journal-reflection" maxlength="32000" placeholder="A thought, a win, something unfinished. A few words count."></textarea><details><summary class="src">Activity notes — written by me</summary><label for="journal-recap" class="src">Activity notes — written by me</label><textarea id="journal-recap" maxlength="16000" placeholder="Add anything you want to remember about the day."></textarea><p class="src">These are your words. Copying a generated recap here is an explicit edit by you.</p></details><section aria-label="Connected activity and generated recap"><p class="src">INCOMPLETE SOURCE COVERAGE · Hermes activity: not connected</p><pre id="journal-coverage" class="journal-evidence"></pre><details><summary class="src">Candidate record quotes for recap</summary><p class="src">Candidates: at most 24 sentences, 250 characters each, 4,000 characters total JSON. Long sentences and excess candidates are excluded; this is partial coverage.</p><pre id="journal-excerpts" class="journal-evidence"></pre></details><p class="src">Generate sends these record excerpts, My reflection and your activity notes to the selected local Ollama model. Content stays on this machine. The model selects exact record quotes; invented text is refused. Reports may be stale or incomplete; review sources.</p><div class="journal-nav"><button id="journal-sources">[ read records ]</button><button id="journal-models">[ refresh models ]</button><select id="journal-model" aria-label="Journal local recap model"><option value="">no local model selected</option></select><button id="journal-generate">[ generate recap ]</button><button id="journal-cancel" hidden>[ cancel recap ]</button></div><p class="src">GENERATED RECAP — MODEL-AUTHORED SELECTION</p><pre id="journal-generated" class="journal-evidence" aria-live="polite"></pre><button id="journal-copy">[ copy recap into my notes ]</button></section><div class="journal-actions"><button id="journal-save">[ save entry ]</button><button id="journal-export">[ export .md ]</button><button id="journal-saved">[ view saved ]</button><button id="journal-draft" hidden>[ return to draft ]</button></div><div id="journal-export-fallback" hidden><label for="journal-export-text" class="src">Copy Markdown</label><textarea id="journal-export-text" readonly></textarea></div><p id="journal-status" class="notice" role="status" aria-live="polite"></p></div>`;
     const q=id=>root.querySelector('#journal-'+id),date=q('date'),reflection=q('reflection'),recap=q('recap'),status=q('status'),history=q('history');
     const token=document.querySelector('meta[name="bridge-token"]')?.content;
     let coverage=null,recapController=null;
-    let entry={day:journalDay(),revision:0,reflection:'',recap:''},busy=false,disposed=false;
+    let entry={day:journalDay(now()),revision:0,reflection:'',recap:''},busy=false,disposed=false;
     const controllers=new Set();
     const draftKey=day=>'home-journal-draft-v1:'+day;
     let draftStorage;try{draftStorage=window.localStorage;}catch{}
@@ -102,7 +102,7 @@ export const journalModule={
     reflection.oninput=remember;recap.oninput=remember;
     date.onchange=()=>{if(date.validity.valid&&date.value)load(date.value);else date.value=entry.day;};
     history.onchange=()=>{if(history.value)load(history.value);};
-    q('today').onclick=()=>load(journalDay());
+    q('today').onclick=()=>load(journalDay(now()));
     q('saved').onclick=()=>load(entry.day,{savedOnly:true});
     q('draft').onclick=()=>load(entry.day,{rebase:true});
     q('save').onclick=save;

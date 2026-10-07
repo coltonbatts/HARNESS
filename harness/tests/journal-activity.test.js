@@ -90,7 +90,8 @@ test('Demo mounted Journal preserves owner words and prior recap on failure/canc
     return {ok:true,json:async()=>url.startsWith('/api/journal/activity')?snapshot:url.includes('?day=')?{entry:{day,revision:0,reflection:'',recap:''}}:{days:[]}};
   };
   function fakeRoot(){const elements=new Map();return {set innerHTML(html){for(const match of html.matchAll(/id="(journal-[^"]+)"/g))elements.set('#'+match[1],{value:'',textContent:'',disabled:false,hidden:false,replaceChildren(){},add(){},focus(){}});},querySelector:id=>elements.get(id),replaceChildren(){elements.clear();}};}
-  const root=fakeRoot(),module=journalModule.mount(root),q=id=>root.querySelector('#journal-'+id);await new Promise(r=>setImmediate(r));
+  const clock={now:()=>new Date(at)};
+  const root=fakeRoot(),module=journalModule.mount(root,clock),q=id=>root.querySelector('#journal-'+id);await new Promise(r=>setImmediate(r));
   q('reflection').value='Demo owner reflection';q('recap').value='Demo owner notes';q('model').value='demo';
   await q('generate').onclick();assert.equal(q('reflection').value,'Demo owner reflection');assert.equal(q('recap').value,'Demo owner notes');assert.ok(q('generated').textContent.includes('<script>literal record fixture</script>'));assert.ok(q('coverage').textContent.includes(at));
   const generatedBefore=q('generated').textContent,draftBefore=stored.get('home-journal-draft-v1:'+day);
@@ -98,7 +99,7 @@ test('Demo mounted Journal preserves owner words and prior recap on failure/canc
   mode='pending';const pending=q('generate').onclick();await new Promise(r=>setImmediate(r));assert.equal(q('save').disabled,true);assert.equal(q('reflection').disabled,true);await q('generate').onclick();assert.equal(calls,3);
   q('cancel').onclick();finish();await pending;assert.equal(q('generated').textContent,generatedBefore);assert.equal(q('recap').value,'Demo owner notes');assert.equal(stored.get('home-journal-draft-v1:'+day),draftBefore);
   q('copy').onclick();assert.ok(q('recap').value.startsWith('Demo owner notes\n\nCopied from generated recap'));assert.equal(q('reflection').value,'Demo owner reflection');
-  module.dispose();const next=fakeRoot(),recovered=journalModule.mount(next);await new Promise(r=>setImmediate(r));assert.ok(next.querySelector('#journal-generated').textContent.includes('Demo <script>'));assert.equal(next.querySelector('#journal-reflection').value,'Demo owner reflection');recovered.dispose();
+  module.dispose();const next=fakeRoot(),recovered=journalModule.mount(next,clock);await new Promise(r=>setImmediate(r));assert.ok(next.querySelector('#journal-generated').textContent.includes('Demo <script>'));assert.equal(next.querySelector('#journal-reflection').value,'Demo owner reflection');recovered.dispose();
 });
 test('Demo bounded task excerpt prefers latest result over stale initial plan',()=>{
   const text='# Demo task\n2026-10-06.\nDemo planned work.\n'+('Older Demo notes.\n'.repeat(20))+'## Complete\nCompleted Demo check.';

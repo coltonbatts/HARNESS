@@ -1,5 +1,37 @@
 # Build log
 
+## Stage 07 — Restore the baseline · October 7, 2026
+
+Completed local Stage 07 on original main `12ac0f0`, preserving all uncommitted completion-planning documents. Reproduced ordinary-time **58/59** and the isolated mounted Journal failure before editing. Root cause is incoherent test time/data: the GET fixture always returned October 6, but mount/remount selected the actual current Chicago day. Generation wrote the fixture-day recovery key; remount correctly sought today's key. This was a fixture defect; separate date/recovery verification found no production defect.
+
+Small source change: optional `journalModule.mount(root, {now})`, defaulting to the live clock, supplies initial opening and Today. The original mounted fixture now injects its October 6 clock into both mounts. Its failure, cancellation/late-output, duplicate-lock, owner-field, inert-output, copy and recovery assertions remain unchanged. New temporary-store mounted tests cover same-day reload, next-day blank opening, explicit yesterday/Today, generated metadata save/restart and revision conflict refusal/review/rebase/save, including spring/fall DST-day midnight openings. Explicit checks cover both DST shifts and the changed subsequent midnight offsets. No schema, route, storage policy, bridge authority, CSP, transport, shell or visual changes.
+
+Final verification: **63/63** full suite at ordinary current time; **63/63** at each controlled instant below, zero failures/skips. Syntax checks for changed JS and `git diff --check` pass. Existing transport/auth/private-output/security assertions remain exercised. Reproducible commands:
+
+```sh
+node --test harness/tests/*.test.js
+HARNESS_TEST_NOW=2026-10-07T04:59:59Z node --import ./harness/tests/helpers/controlled-clock.mjs --test harness/tests/*.test.js
+HARNESS_TEST_NOW=2026-10-07T05:00:00Z node --import ./harness/tests/helpers/controlled-clock.mjs --test harness/tests/*.test.js
+```
+
+Real UI: Codex in-app browser, isolated loopback port 53158/private temporary store, October 7 approximately 12:58–13:02 CDT. Same-day reload recovered Demo owner reflection/notes and a separate generated Demo quote selection. Controlled Chicago midnight reload opened October 7 empty; explicit return to October 6 recovered all fields. Saved-file reload, conflict refusal retaining draft, review saved/return to draft, explicit save and subsequent reopen passed. Ordinary live-clock opening also selected October 7. Desktop **1200×800** and narrow **390×844**, no horizontal overflow; warning/error logs empty; viewport/clock overrides reset. Sanitized evidence: `evidence/stage07-baseline.json`, `evidence/stage07-journal-recovery.jpg`. Browser-created navigation initially failed (`ERR_BLOCKED_BY_CLIENT`); the app-opened preview was accessible. An initial temporary-root macOS path alias was corrected with realpath; production bridge checks were retained. Temporary tabs/server/store removed; existing 4175 bridge untouched.
+
+Active README/prompts/contract now describe the green baseline, real local Ollama, observed Launcher and existing Journal recap. STATUS has an appended repair result, retaining its original October 7 assessment. Historical Stage 01–06/build evidence and exact archives preserved. Stage files: Journal module, original recovery test, new `journal-recovery.test.js`, test-only `helpers/controlled-clock.mjs`, README, BUILD-PROMPTS, MODULE-CONTRACT, appended STATUS, build log and sanitized evidence. PRODUCT-SPEC and archived drafts remain preserved planning work.
+
+Limits: browser recap was labeled **Demo-fixture**, not a new live Ollama trial; DST was controlled evidence, not elapsed calendar time. No owner Journal entries inspected/altered, external accounts, native launch, installation, delegation, commit/push or publication. Local work remains uncommitted on main at `12ac0f0`; no blocker. Studio Ops `dashboard-013-baseline-recovery.md` and Dashboard handoff updated, ownership released. **Stop before Stage 08.** Exact next action: submit shared preamble + Stage 08, create/use `dashboard-014-tool-destinations.md`, verify live Git/writer state, then inspect fixed destinations and diagnose Atlas exit 1 / dependable ChatGPT route within Stage 08 authorization.
+
+### Subsequent local commit authorization — October 7, 2026
+
+Colton authorized committing the completed Stage 07 and preserved completion-plan documents together before Stage 08 in a new chat. Final diff/manifest reviewed; implementation unchanged from the verified 63/63 runs. Local commit only; no push or Stage 08 work. Commit identity and clean-tree verification recorded in the Studio Ops Stage 07 task/handoff after commit.
+
+## 2026-10-07 — Assessment and completion plan (documentation only)
+
+Reviewed current source, tests, implementation records and Studio Ops handoff at clean main `12ac0f0`. Existing bridge document HTTP 200, unauthenticated state 403, PID 47665 loopback 4175. Full suite today **58/59**; the mounted Journal recovery test fails at journal-activity.test.js:101 and fails alone. The October 6 fixed fixture date differs from mount's live journalDay(); a process-local fixture-day clock makes the isolated assertion pass. No source repair applied; historical 59/59 remains dated evidence, not today's status.
+
+Added STATUS-2026-10-07.md, replaced canonical PRODUCT-SPEC.md with proposed v1 completion scope, and BUILD-PROMPTS.md with stages 07–15. Exact prior drafts archived; README points to current artifacts. Required finish: baseline, destinations, shell/settings, projects/handoffs, durable conversations/context, Mac delivery and release acceptance. Hermes activity and saved-journal recall are P1 with explicit capability gates; agent-runtime control remains a later selected scope. No runtime/source/config/private writing changes, new model calls, app activation, install, delegation, commit or push.
+
+Checks: Markdown links/fences and requirement/stage mapping reviewed; nine sequential prompts verified; archive bytes match prior HEAD documents; git diff --check clean. Today's UI/model/native behavior beyond HTTP probes was not retested; existing evidence was read as historical. Next action: submit shared preamble plus Stage 07. Planning task dashboard-012-completion-plan.md complete; documentation writing owner released.
+
 ## Stage 06 — Journal records and local recap · October 6, 2026
 
 Journal now reads only fixed allowlisted project/task Markdown records and generates an explicitly requested local Ollama recap through the existing route. Separate model-authored selection draft with source observations/line references; owner reflection and notes are untouched. Save/history/recovery/export preserve the generated field independently. Explicit copy appends a labeled copy to editable notes. Live free-prose trials overstated older task outcomes; final acceptance therefore validates only model-selected candidate numbers and quotes the original record/owner sentences verbatim. Invented text, invalid/out-of-range/duplicate selections or extra keys are refused; no model prose enters the generated field. UI shows incomplete coverage, Hermes not connected and local processing disclosure. No new model/action authority or changes to Chat, Usage, Launcher, shell, registry, binding mockup or strict CSP.

@@ -1,0 +1,72 @@
+{
+  "stage": 7,
+  "date": "2026-10-07",
+  "head": "12ac0f035ab0522021f2bca8a8128cb2b25b82a4",
+  "artifact": "uncommitted local changes",
+  "baseline": {
+    "passed": 58,
+    "failed": 1,
+    "total": 59,
+    "isolatedFailure": "mounted Journal recovery at journal-activity.test.js:101"
+  },
+  "finalRuns": [
+    {
+      "clock": "ordinary current time",
+      "passed": 63,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "clock": "2026-10-07T04:59:59Z",
+      "passed": 63,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "clock": "2026-10-07T05:00:00Z",
+      "passed": 63,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "ui": {
+    "browser": "Codex in-app browser",
+    "origin": "http://127.0.0.1:53158",
+    "time": "October 7, 2026 approximately 12:58\u201313:02 CDT",
+    "store": "temporary isolated JournalStore, removed afterward",
+    "source": "Demo-record fixture only",
+    "model": "Demo-fixture transport, no real inference",
+    "results": [
+      "same-day reload restored reflection, notes and separate generated recap",
+      "midnight reload opened next day with empty fields",
+      "explicit yesterday navigation restored all three fields",
+      "save to private isolated file succeeded",
+      "competing revision refused without losing browser draft",
+      "view saved / return to draft / explicit save succeeded",
+      "reopened saved file retained owner fields and generated recap",
+      "ordinary current clock opened October 7"
+    ],
+    "viewports": [
+      {
+        "width": 1200,
+        "height": 800,
+        "scrollWidth": 1200
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "scrollWidth": 390
+      }
+    ],
+    "warningErrorLogs": [],
+    "screenshot": "stage07-journal-recovery.jpg",
+    "clockOverrideReset": true
+  },
+  "limits": [
+    "No new live Ollama acceptance",
+    "DST verified with controlled tests",
+    "No owner journal read/write",
+    "Existing 4175 bridge not restarted",
+    "No commit/push, installation, delegation or Stage 08 implementation"
+  ]
+}
