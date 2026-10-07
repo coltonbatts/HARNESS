@@ -1,0 +1,36 @@
+{
+  "codexDestination": "com.openai.codex \u00b7 26.930.61225\n/Applications/ChatGPT.app\nAvailable: Approved bundle metadata and executable verified\nOBSERVED Oct 7, 14:28:56 CT \u00b7 Exact main executable match; running means non-zombie process present, not connected\nFOCUS UNKNOWN \u00b7 run \u2260 connected \u00b7 CPU is main-process ps %\ndispatch Oct 7, 14:28:00 CT / running observed Oct 7, 14:28:00 CT\ndispatched Oct 7, 14:28:00 CT / observation Oct 7, 14:28:00 CT\nbridge-response: dispatched; running observed; focus UNKNOWN\nMissing/moved? Expand Configure and explicitly register the approved bundle path. \u00b7 Alternative: run codex in your terminal",
+  "feedback": "dispatched Oct 7, 14:28:00 CT \u00b7 observed running Oct 7, 14:28:00 CT \u00b7 focus UNKNOWN",
+  "observedCheck": "2026-10-07T19:28:56.750Z",
+  "ownInline": 0,
+  "usage": "Codex \u00b7 5-hour\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\n73%\nLOCAL \u00b7 authoritative to daemon \u00b7 0m old \u00b7 used 27% \u00b7 300 min\nreset/end Oct 07, 18:01 CDT \u00b7 start UNKNOWN\nobserved Oct 07, 14:28 CDT \u00b7 local daemon \u00b7 account-wide Codex subscription \u00b7 plan plus\nCodex \u00b7 weekly \u00b7 7-day\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\n91%\nLOCAL \u00b7 authoritative to daemon \u00b7 0m old \u00b7 used 9% \u00b7 10080 min\nreset/end Oct 14, 02:23 CDT \u00b7 start UNKNOWN\nobserved Oct 07, 14:28 CDT \u00b7 local daemon \u00b7 account-wide Codex subscription \u00b7 plan plus\nClaude \u00b7 5-hour\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591\u2591\n55%\nSTALE \u00b7 authoritative \u00b7 1346m old \u00b7 used 45%\nreset/end Oct 06, 18:20 CDT \u00b7 start UNKNOWN\nobserved Oct 06, 16:02 CDT \u00b7 local statusline \u00b7 Claude subscription scope\nClaude \u00b7 weekly \u00b7 7-day\n\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\n78%\nSTALE \u00b7 authoritative \u00b7 1346m old \u00b7 used 22%\nreset/end Oct 11, 12:00 CDT \u00b7 start UNKNOWN\nobserved Oct 06, 16:02 CDT \u00b7 local statusline \u00b7 Claude subscription scope\nCodex estimated USD \u00b7 UNKNOWN \u00b7 account-wide estimate absent from schema; subscription % is separate\nCodex token activity \u00b7 201 account-wide daily buckets observed \u00b7 latest 2026-10-06 \u00b7 51447931 tokens \u00b7 Oct 07, 14:28 CDT \u00b7 daemon report, not billing audit",
+  "viewport": {
+    "height": 800,
+    "scrollWidth": 1200,
+    "width": 1200
+  },
+  "finalRuntimeCheck": {
+    "observedDisplay": "Oct 07, 14:34 CDT",
+    "bridgePid": 22606,
+    "plan": "plus",
+    "scope": "account-wide Codex subscription",
+    "source": "local official daemon",
+    "confidence": "authoritative to daemon",
+    "windows": [
+      {
+        "durationMins": 300,
+        "usedPercent": 32,
+        "remainingPercent": 68,
+        "resetDisplay": "Oct 07, 18:01 CDT"
+      },
+      {
+        "durationMins": 10080,
+        "usedPercent": 10,
+        "remainingPercent": 90,
+        "resetDisplay": "Oct 14, 02:23 CDT"
+      }
+    ],
+    "freshWindows": "2/4",
+    "receipts": "cleared by final bridge restart; prior real dispatch retained above"
+  }
+}

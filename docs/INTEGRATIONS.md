@@ -1,3 +1,7 @@
+# Current Stage 09 amendment — October 7, 2026
+
+Active destinations: Cursor, Claude, Codex, Hermes. Atlas/ChatGPT HTTPS routes below are dated history, removed from current registrations and UI. Codex verified com.openai.codex / ChatGPT main executable in /Applications/ChatGPT.app, 26.930.61225; standard registration rules apply. Read-only Codex account-wide usage now implemented; exact protocol, socket, authority and schema limits in CODEX-USAGE.md. No credentials, account identifiers or private sessions read/exported.
+
 # Claude subscription Usage — Stage 02
 
 Research and local verification: October 6, 2026. Scope fixed by Colton: **Claude subscription only**, 5-hour and weekly windows. Colton explicitly confirmed that he uses Claude Code on this Mac. No other provider was added; no model-level allocations or API-dollar readings are shown.
@@ -131,3 +135,11 @@ Activation used the served page's trusted user buttons. First run: before activa
 | ChatGPT HTTPS URL in Atlas | `open` failed, exit 1 at 16:29:26; successful ps snapshot found no exact executable afterward | Dispatch unavailable in this installation; native route unverified; URL load/focus unverified. No system repair, reinstall or alternate route attempted |
 
 `evidence/bridge-state.json` contains sanitized UTC process/route evidence from the final run (`bridge-state-initial.json` preserves the first run); screenshots record the final UI and failed Atlas dispatch. Cross-origin/token/unknown-tool rejection is proven with isolated HTTP integration tests and an injected executor count (zero rejected activations), not by a malicious live launch. Plain-server and stopped-bridge fallback were checked in the browser. Stage 03 HTTPS navigation evidence remains historical and does not upgrade Atlas native dispatch.
+
+## Stage 08 current destinations — October 7, 2026
+
+Supersedes Stage 04's fixed Atlas dispatch route only. Read-only live metadata: Cursor 3.23.23 (`com.todesktop.230313mzl4w4u92`), Claude 2.26454.2 (`com.anthropic.claudefordesktop`), Hermes 0.0.0 (`com.nousresearch.hermes`); approved executable files present. `/Applications/ChatGPT Atlas.app` is absent today. `/Applications/ChatGPT.app` identifies as `com.openai.codex`, executable ChatGPT, version 26.930.61225; native ChatGPT support is not inferred. Historical Atlas failure retained exit 1/absence but no platform error in the sanitized record, so the exact October 6 cause remains unproven. Current missing bundle explains today's refusal; no handler success, repair or alternate native retry claimed.
+
+ChatGPT is now explicit ordinary HTTPS navigation. Trusted Launcher click loaded `https://chatgpt.com/` with ChatGPT composer in a new **Codex in-app browser tab** at approximately 13:53 CDT; no message sent. Target handling in other browsers is unverified. Native Cursor/Claude/Hermes trusted clicks returned exit 0 and exact already-running processes afterward at 13:53:07/12/12 CDT. Focus UNKNOWN for all; no fresh-window claim. Exact sanitized times/PIDs in `evidence/stage08-destinations.json`.
+
+`LAUNCHER-REGISTRATION.md` defines the new narrow authority recorded before implementation: three approved identities, canonical app paths, exact plutil/open argv, bounded body/metadata, authenticated explicit registration and private atomic persistence. No arbitrary command, argument, URL or filesystem proxy. All earlier transport protections persist. New `/api/launcher/registration` uses the same refusal-before-dispatch gates; Atlas `/api/open` is refused. All four rows remain discoverable. State/configuration/reload never open apps. No native packaging or sessions added.

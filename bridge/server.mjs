@@ -3,6 +3,7 @@ import {randomBytes,timingSafeEqual} from 'node:crypto';
 import {readFile,realpath,stat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {CodexUsageService} from './codex-usage.mjs';
 import {BridgeService} from './core.mjs';
 import {OllamaService,validateChat} from './ollama.mjs';
 import {ActivityReader} from './activity.mjs';
@@ -15,7 +16,7 @@ export function authorize(headers,{origin,token},mutation=false){
   const supplied=headers['x-bridge-token'];
   return typeof supplied==='string'&&Buffer.byteLength(supplied)===Buffer.byteLength(token)&&timingSafeEqual(Buffer.from(supplied),Buffer.from(token));
 }
-export function createBridge({service=new BridgeService(),activity=new ActivityReader(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
+export function createBridge({codexUsage=new CodexUsageService(),service=new BridgeService(),activity=new ActivityReader(),ollama=new OllamaService(),root=harnessRoot,journal=new JournalStore(fileURLToPath(new URL('../.journal/',import.meta.url)))}={}){
   const token=randomBytes(32).toString('hex');let origin;
   const server=http.createServer(async(req,res)=>{
     const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Cross-Origin-Resource-Policy':'same-origin','X-Frame-Options':'DENY','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"};
@@ -47,6 +48,12 @@ export function createBridge({service=new BridgeService(),activity=new ActivityR
           if([...url.searchParams.keys()].join(',')!=='day'||!validDay(day))return reply(400,{error:'Expected one activity date; no paths accepted'});
           return reply(200,await activity.snapshot(day));
         }
+        if(req.method==='GET'&&url.pathname==='/api/usage/codex'){
+          if(url.search||req.headers['content-length']&&req.headers['content-length']!=='0'||req.headers['transfer-encoding'])return reply(400,{error:'Codex usage accepts no parameters/body'});
+          const abort=new AbortController(),disconnected=()=>{if(!res.writableEnded)abort.abort();};res.on('close',disconnected);
+          try{const data=await codexUsage.snapshot(abort.signal);if(!res.destroyed)return reply(200,data);}finally{res.removeListener('close',disconnected);}
+          return;
+        }
         if(req.method==='GET'&&url.pathname==='/api/state')return reply(200,await service.state());
         if(req.method==='GET'&&url.pathname==='/api/journal'){
           if(!url.search)return reply(200,{days:await journal.list()});
@@ -60,7 +67,15 @@ export function createBridge({service=new BridgeService(),activity=new ActivityR
           let input;try{input=JSON.parse(body);}catch{return reply(400,{error:'Invalid JSON'});}
           const result=await (url.pathname==='/api/journal/export'?journal.export(input):journal.save(input));return reply(result.status,result);
         }
+        if(req.method==='POST'&&url.pathname==='/api/launcher/registration'){
+          if(url.search)return reply(400,{error:'Registration accepts no query parameters'});
+          if(req.headers['content-type']!=='application/json')return reply(415,{error:'JSON required'});
+          let body='';for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>1024)return reply(413,{error:'Body too large'});}
+          let input;try{input=JSON.parse(body);}catch{return reply(400,{error:'Invalid JSON'});}
+          const result=await service.register(input);return reply(result.httpStatus,result);
+        }
         if(req.method==='POST'&&url.pathname==='/api/open'){
+          if(url.search)return reply(400,{error:'Open accepts no query parameters'});
           if(req.headers['content-type']!=='application/json')return reply(415,{error:'JSON required'});
           let body='';for await(const chunk of req){body+=chunk;if(Buffer.byteLength(body)>1024)return reply(413,{error:'Body too large'});}
           let input;try{input=JSON.parse(body);}catch{return reply(400,{error:'Invalid JSON'});}

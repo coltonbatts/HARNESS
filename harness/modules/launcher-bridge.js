@@ -13,7 +13,8 @@ export function normalizeBridgeState(payload,ids,now=Date.now()){
     const e=r?.evidence;
     return rows.length===1&&r.verification==='verified-dispatch-and-running'&&Number.isFinite(Date.parse(e?.dispatchAt))&&Number.isFinite(Date.parse(e?.observedAt))?{id,verification:r.verification,evidence:e}:{id,verification:'unverified',evidence:null};
   });
-  return {tools,routes};
+  const registrations=ids.map(id=>{const r=Array.isArray(payload.registrations)?payload.registrations.find(r=>r?.tool===id):null;return r&&typeof r.available==='boolean'&&typeof r.reason==='string'?r:{tool:id,available:false,reason:'Registration UNKNOWN; refresh bridge before opening'};});
+  return {tools,routes,registrations};
 }
 export class LauncherBridge{
   constructor({token,ids,fetcher=(...args)=>fetch(...args),now=Date.now}={}){this.token=token;this.ids=ids;this.fetcher=fetcher;this.now=now;this.snapshot=null;this.error='Local bridge unavailable';this.pending=null;this.aborters=new Set();this.disposed=false;}
@@ -24,8 +25,9 @@ export class LauncherBridge{
         this.fetcher(url,{...options,cache:'no-store',credentials:'omit',signal:abort.signal,headers:{'X-Bridge-Token':this.token,...options.headers}}),
         new Promise((_,reject)=>{timer=setTimeout(()=>{abort.abort();reject(new Error('Bridge timed out'));},6000);})
       ]);
-      if(!response.ok)throw new Error(`Bridge refused/unavailable (${response.status})`);
-      return await response.json();
+      const data=await response.json();
+      if(!response.ok)throw new Error(typeof data.error==='string'?data.error:`Bridge refused/unavailable (${response.status})`);
+      return data;
     }finally{clearTimeout(timer);this.aborters.delete(abort);}
   }
   async refresh(){
@@ -38,6 +40,11 @@ export class LauncherBridge{
     }catch{if(!this.disposed){this.snapshot=null;this.error='Local bridge unavailable or refused; state UNKNOWN';}return null;}finally{this.pending=null;}})();
     return this.pending;
   }
+  async register(tool,bundlePath){
+    if(!this.token||this.disposed)return {error:'Registration requires the local bridge'};
+    try{return await this.request('/api/launcher/registration',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool,bundlePath})});}
+    catch(error){return {error:error.message};}
+  }
   async open(id){
     if(this.disposed||!this.token||!this.ids.includes(id))return {error:'Bridge unavailable or destination unknown'};
     try{
@@ -45,7 +52,7 @@ export class LauncherBridge{
       if(result.id!==id||!['dispatched','failed'].includes(result.dispatch?.status)||!Number.isFinite(Date.parse(result.dispatch.at)))throw new Error('Invalid dispatch result');
       const data=normalizeBridgeState({tools:[result.observation]},[id],this.now());
       return {dispatch:result.dispatch,observation:data.tools[0],verification:result.verification};
-    }catch{this.snapshot=null;this.error='Bridge activation unavailable/refused; outcome UNKNOWN';return {error:this.error};}
+    }catch(error){this.snapshot=null;this.error=error.message+'; no activation success claimed';return {error:this.error};}
   }
   dispose(){this.disposed=true;for(const abort of this.aborters)abort.abort();this.aborters.clear();this.snapshot=null;}
 }

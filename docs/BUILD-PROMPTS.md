@@ -1,6 +1,6 @@
 # HARNESS — completion build prompts
 
-October 7, 2026. Stages 01–07 are implemented locally. Stage 07 passed 63/63 with isolated UI recovery checks; the next stage to select is **08**. These prompts were authored as future instructions by the planning session; execution results are in BUILD-LOG and the appended STATUS repair result. Run one selected prompt per coding session; record its outcome before choosing the next. No automatic delegation or stage chaining.
+October 7, 2026. Stages 01–09 are implemented locally, including Colton-selected custom Stage 09 Codex usage + destination. Full suite 80/80; the next slot is the original shell/settings stage, separately selected. Earlier Stage 07/08 prompt sequencing below is dated planning history. These prompts were authored as future instructions by the planning session; execution results are in BUILD-LOG and the appended STATUS repair result. Run one selected prompt per coding session; record its outcome before choosing the next. No automatic delegation or stage chaining.
 
 Current plan: `PRODUCT-SPEC.md` v1.0. Current baseline: `STATUS-2026-10-07.md`. Previous shell-first prompts preserved at `archive/BUILD-PROMPTS-shell-first-2026-10-06.md`; rejected fixed-dashboard sequence remains historical.
 
@@ -105,7 +105,11 @@ Done: four dependable or honestly unavailable destinations, ChatGPT usable by a
 verified route, exact evidence/limits and full suite passing. Stop.
 ```
 
-## 09 — Finish the shell and settings contract
+## Selected Stage 09 override — October 7, 2026
+
+Colton explicitly selected Codex usage + destination in place of the original Stage 09 slot: remove ChatGPT/Atlas, add verified Codex or honest CLI-only destination, add read-only local daemon usage. Completed result is in BUILD-LOG, CODEX-USAGE and Studio Ops task dashboard-015-codex-usage. Shell/settings moves to the next slot; the original prompt below remains the planned work, not executed by the custom stage. Reconcile downstream numbering when the next stage is selected.
+
+## Next slot — Finish the shell and settings contract (original Stage 09)
 
 Requirement: R03. Dependency: 08.
 

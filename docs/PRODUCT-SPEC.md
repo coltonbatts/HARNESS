@@ -2,6 +2,8 @@
 
 Version 1.0 · October 7, 2026 · Proposed v1 scope
 
+Selected amendment October 7: Colton replaces ChatGPT/Atlas with Codex and selects read-only Codex usage as custom Stage 09. Shell/settings moves to the next slot. Existing stage history stands; current runtime details are in MODULE-CONTRACT and CODEX-USAGE.
+
 This is the current planning specification, superseding the October 6 v0.3 fixed-pane draft and stale stage descriptions. Existing runtime behavior remains governed by `MODULE-CONTRACT.md`; future stages update that contract as they are implemented. The approved `design/home-harness-mockup.html` remains the visual target. Prior spec: `archive/PRODUCT-SPEC-v0.3-2026-10-06.md`. Current evidence: `STATUS-2026-10-07.md`.
 
 ## Product and problem
@@ -18,7 +20,7 @@ This proposed v1 is a work hub with local intelligence. A full agent harness wou
 | --- | --- | --- |
 | Start work without setup friction | App opens without a terminal command or separately installed Node; usable shell within 5 seconds on Colton's Mac with external sources unavailable | Three timed cold launches of the packaged artifact; machine/build identified |
 | Recover context | Selected project, layout and saved conversations survive quit/relaunch; pending sends never replay | Automated persistence checks plus actual quit/relaunch |
-| Reach the four original tools | Each configured destination has a successful observed launch/navigation receipt or a clear unavailable reason and working alternative destination | One real check per tool, including ChatGPT; separate dispatch, process and focus evidence |
+| Reach the four selected tools | Each configured destination has a successful observed launch/navigation receipt or a clear unavailable reason and working alternative destination | One real check per tool, including Codex; separate dispatch, process and focus evidence |
 | Keep personal writing | Journal text survives write failure/restart/relaunch; backup/export can be restored in an isolated store | Recovery/conflict/date tests and restore drill |
 | Earn daily use | Colton starts from HARNESS on at least 5 of 7 trial days and reports whether returning to a project is easier | Voluntary daily check in `TRIAL.md`; target is a hypothesis, no fabricated telemetry |
 
@@ -56,7 +58,7 @@ Acceptance: full suite passes on ordinary current time and controlled Chicago da
 
 ### R02 — Dependable tool access
 
-Support configured Cursor, Claude, ChatGPT and Hermes destinations, with missing/changed installation handling. Preserve fixed user-selected app registrations and bounded dispatch. A failed Atlas route needs investigation; a clearly labeled ordinary ChatGPT HTTPS destination may be a supported fallback. Native Atlas success cannot be inferred from another browser loading ChatGPT.
+Support configured Cursor, Claude, Codex and Hermes destinations, with missing/changed installation handling. Preserve fixed user-selected app registrations and bounded dispatch. Stage 08 Atlas/HTTPS evidence remains dated history. The selected Stage 09 removes that destination; Codex requires verified native bundle identity/executable or an honest CLI-only row. Add read-only account-wide local daemon Codex usage without credential/session access.
 
 Acceptance: existing-instance and stopped-app checks where available; unavailable app and invalid registration refusal; no launch on read/reload; no shell interpolation. A destination opened and an app focused are separate facts. Allowlisted registration updates may choose an app bundle; no arbitrary executable command field.
 

@@ -2,9 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {tools,routeFor,processState,filterTools,moveSelection,LauncherController} from '../modules/launcher-core.js';
 
-test('routes are allowlisted and Atlas is only an HTTPS destination',()=>{
-  for(const tool of tools) assert.equal(routeFor(tool).available,true);
-  assert.equal(routeFor(tools[2]).kind,'url-target');
+test('four destinations are allowlisted; Codex requires a verified bridge and has CLI-only fallback',()=>{
+  assert.deepEqual(tools.map(t=>t.id),['cursor','claude','codex','hermes']);
+  for(const tool of tools) assert.equal(routeFor(tool,{bridge:true}).available,true);
+  assert.equal(routeFor(tools[2]).available,false);assert.match(routeFor(tools[2]).reason,/run codex in your terminal/);
+  assert.equal(routeFor(tools[2],{bridge:true}).kind,'native-bundle');
   for(const tool of [null,{}, {...tools[0],scheme:null}, {...tools[0],installed:'missing'}, {...tools[0],scheme:'unknown'}, {...tools[0],url:'claude://'}, {...tools[0],url:'bad url'}, {...tools[0],url:'cursor://payload'}, {...tools[0],kind:'unknown'}, {...tools[2],url:'https://example.com/'}]) assert.equal(routeFor(tool).available,false);
 });
 test('only user activation dispatches; repeated requests are bounded per route',()=>{
@@ -27,7 +29,7 @@ test('filtering and keyboard selection follow visible rows and empty lists',()=>
   const c=new LauncherController();c.select('End');assert.equal(c.selectedId,'hermes');c.select('ArrowDown');assert.equal(c.selectedId,'cursor');c.select('ArrowUp');assert.equal(c.selectedId,'hermes');c.select('Home');assert.equal(c.selectedId,'cursor');
   c.filter(' CLAUDE ');assert.equal(c.selectedId,'claude');assert.equal(c.rows.length,1);c.select('ArrowDown');assert.equal(c.selectedId,'claude');
   c.filter('no match');assert.equal(c.selectedId,null);c.select('End');assert.equal(c.selectedId,null);assert.equal(moveSelection([],null,'ArrowUp'),null);
-  assert.equal(filterTools('com.nousresearch')[0].id,'hermes');assert.equal(filterTools('https')[0].id,'atlas');
+  assert.equal(filterTools('com.nousresearch')[0].id,'hermes');assert.equal(filterTools('https').length,0);assert.equal(filterTools('com.openai.codex')[0].id,'codex');
 });
 test('dispatch and manual outcomes never create process knowledge or automatic success',()=>{
   const c=new LauncherController();assert.equal(c.report('cursor','opened'),false);

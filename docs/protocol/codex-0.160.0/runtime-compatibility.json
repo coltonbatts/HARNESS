@@ -1,0 +1,27 @@
+{
+  "observedDate": "2026-10-07",
+  "runtimeVersion": "0.161.0",
+  "initialPinnedVersion": "0.160.0",
+  "daemonPid": 19500,
+  "authority": "Read-only generate-ts/generate-json-schema; HARNESS did not request daemon update",
+  "identicalBindings": [
+    "v2/GetAccountParams.ts",
+    "v2/GetAccountRateLimitsParams.ts",
+    "v2/GetAccountTokenUsageParams.ts",
+    "v2/RateLimitWindow.ts",
+    "v2/GetAccountTokenUsageResponse.ts",
+    "v2/AccountRateLimitsUpdatedNotification.ts",
+    "PlanType.ts"
+  ],
+  "allowedMethods": [
+    "account/read",
+    "account/rateLimits/read",
+    "account/usage/read"
+  ],
+  "clientRequestSha256": "e2761659dcbdc94e98768fbbd97987a55334393b670aaf9412b54a779f3b13fa",
+  "serverNotificationSha256": "5e0d56b131445f17424d88bf26f33135cd3c4c2c0fc2a1c84b4cc528d0a224de",
+  "newNotificationMethods": [
+    "thread/prediction/updated"
+  ],
+  "handling": "Unrecognized notifications discarded without reply/storage/logging; no session subscription or read"
+}

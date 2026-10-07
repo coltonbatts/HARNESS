@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-07",
+  "project": "HARNESS / DASHBOARD",
+  "source": "read-only installed plist/executable inspection; /bin/ps exact executable observation; real trusted Launcher clicks in Codex in-app browser",
+  "model": "none; no model inference or external message sent",
+  "ui": {"origin": "http://127.0.0.1:53159", "privateStore": "temporary isolated store, removed after checks", "dimensions": [{"width":1200,"height":800,"scrollWidth":1200},{"width":390,"height":844,"scrollWidth":390}]},
+  "installed": [
+    {"tool":"cursor","bundleId":"com.todesktop.230313mzl4w4u92","version":"3.23.23","path":"/Applications/Cursor.app"},
+    {"tool":"claude","bundleId":"com.anthropic.claudefordesktop","version":"2.26454.2","path":"/Applications/Claude.app"},
+    {"tool":"hermes","bundleId":"com.nousresearch.hermes","version":"0.0.0","path":"/Applications/Hermes.app"}
+  ],
+  "activations": [
+    {"tool":"cursor","dispatch":"open exited 0","dispatchAt":"2026-10-07T18:53:07.232Z","observedAt":"2026-10-07T18:53:07.303Z","running":true,"pids":[27955],"before":"already running","focus":"UNKNOWN"},
+    {"tool":"claude","dispatch":"open exited 0","dispatchAt":"2026-10-07T18:53:12.056Z","observedAt":"2026-10-07T18:53:12.274Z","running":true,"pids":[96613],"before":"already running","focus":"UNKNOWN"},
+    {"tool":"hermes","dispatch":"open exited 0","dispatchAt":"2026-10-07T18:53:12.408Z","observedAt":"2026-10-07T18:53:12.998Z","running":true,"pids":[71781],"before":"already running","focus":"UNKNOWN"},
+    {"tool":"atlas","name":"ChatGPT HTTPS","atLocal":"October 7 approximately 13:53 CDT","url":"https://chatgpt.com/","browser":"Codex in-app browser","scope":"new tab","observed":"ChatGPT page and composer loaded; no message sent","nativeDispatch":"none","AtlasLaunch":"unverified","focus":"UNKNOWN"}
+  ],
+  "atlasDiagnosis": {"configuredPathExists":false,"historical":"October 6 exit 1 and observed absent; original platform error not retained in sanitized record, exact historical cause unproven","today":"Atlas configured bundle absent; current ChatGPT.app bundleId com.openai.codex, executable ChatGPT, version 26.930.61225; filename does not establish supported ChatGPT native destination"},
+  "interactiveChecks": ["filter and keyboard Home/End/Enter selection", "bad bundle refused without replacing preceding registration", "approved registration saves without opening", "registration survives page reload and bridge restart", "old page token refused; reload recovers; new run receipts unverified", "labeled Demo absent Cursor stays visible with UNKNOWN and Configure next action", "Demo explicit re-selection restores available registration without launch", "Demo disabled executor fails while real process remains observed running", "two trusted Demo clicks within one second: second request held", "plain-server native scheme requests labeled with UNKNOWN; fixed HTTPS link usable", "desktop and narrow have no horizontal document overflow"],
+  "limits": ["real native checks used already-running apps; stopped-app and missing/moved/identity/symlink cases are isolated labeled Demo tests", "process presence does not prove a new window, causal launch, connected session or focus", "Atlas not repaired, relaunched or retried; native ChatGPT unsupported by inspected identity", "no account/private text or token captured; ChatGPT screenshot intentionally omitted", "expected 403 errors during old-token restart test are diagnostic; not a zero-error claim for that tab"]
+}
